@@ -8,13 +8,8 @@
       <el-input placeholder="Password" label="Password" style="width:300px"></el-input>
     </div>
     <div>
-
-
-          <el-button style="width:100px" type="primary">Login</el-button>
-
+          <el-button style="width:100px" @click="gologin" type="primary">Login</el-button>
           <el-button type="primary" @click="goregister">Register</el-button>
-
-
     </div>
   </div>
 </template>
@@ -23,7 +18,23 @@
 export default {
   name: "Login",
   methods:{
-    goregister(){this.$router.push('/register')}
+    goregister(){
+
+      this.$router.push('/register')
+      },
+      gologin(){
+      this.$alert('You have successfully logged in.', 'Welcome', {
+        confirmButtonText: 'Confirm',
+  // callback: action => {
+  //        this.$message({
+  //          type: 'info',
+  //          message: `action: ${ action }`
+  //        });
+ //      }
+      });
+        this.$router.push('/admin')
+
+      }
   }
 
 }

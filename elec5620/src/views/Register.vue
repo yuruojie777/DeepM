@@ -11,15 +11,20 @@
       <el-input label="Password" style="width:300px"></el-input>
     </div>
     <div>
-      <el-button style="width:100px" type="primary">Login</el-button>
-      <el-button type="primary" @click="goregister">Register</el-button>
+      <el-button style="width:100px" @click="gologin" type="primary">Login</el-button>
+      <el-button style="width:100px" type="primary" @click="goregister">Submit</el-button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Register"
+  name: "Register",
+  methods:{
+    gologin(){
+      this.$router.push('/login')
+    },
+  }
 }
 </script>
 
