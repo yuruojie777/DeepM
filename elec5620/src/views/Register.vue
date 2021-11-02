@@ -53,7 +53,12 @@ export default {
           {min: 1, max: 10, message: 'Between 1 and 10 characters in length.', trigger: 'blur'}
         ],
         email: [
-          {required: true, message: 'please input your email', trigger: 'blur'}
+          {required: true, message: 'please input your email', trigger: 'blur'},
+          {
+            type: 'email',
+            message: 'Please input the right email adress',
+            trigger: ['blur', 'change'],
+          },
         ],
         password1:[
           {required: true, message: 'please input your email', trigger: 'blur'}
@@ -74,9 +79,17 @@ export default {
       this.$router.push('/login')
     },
     submit(){
-      this.$alert('You have successfully  registered.', 'Welcome', {
-        confirmButtonText: 'Confirm',});
-      this.$router.push('/login')
+      this.$refs.ruleForm.validate((valid)=> {
+        if(valid) {
+          if(this.ruleForm.password1==this.ruleForm.password2) {
+            this.$alert('You have successfully  registered.', 'Welcome', {
+              confirmButtonText: 'Confirm',
+            });
+            this.$router.push('/login')
+          }
+          else{this.$alert('Two password does not match！')}
+        }
+      })
     },
   }
 }

@@ -26,21 +26,30 @@ export default {
   name: "Login",
   methods:{
     goregister(){
-
       this.$router.push('/register')
       },
       gologin(){
-      this.$alert('You have successfully logged in.', 'Welcome', {
-        confirmButtonText: 'Confirm', });
-  // callback: action => {
-  //        this.$message({
-  //          type: 'info',
-  //          message: `action: ${ action }`
-  //        });
- //      }
-
-        this.$router.push('/admin')
-
+      this.$refs.ruleForm.validate((valid)=>{
+      if(valid){
+      if(this.ruleForm.email === '4399@qq.com'&& this.ruleForm.password=== '4399')
+        {
+          this.$alert('You have successfully logged in.', 'Welcome', {
+            confirmButtonText: 'Confirm',
+          });
+          // callback: action => {
+          //        this.$message({
+          //          type: 'info',
+          //          message: `action: ${ action }`
+          //        });
+          //      }
+          this.$router.push('/admin')
+        }
+      else {
+       this.$alert('wrong password or email!')
+      }
+      }
+      }
+      )
       }
   },
   data(){
@@ -51,15 +60,19 @@ export default {
       },
       rules: {
        email: [
-          {required: true, message: 'Please input your name', trigger: 'blur'}
+          {required: true, message: 'Please input your name', trigger: 'blur'},
+         {
+           type: 'email',
+           message: 'Please input the right email adress',
+           trigger: ['blur', 'change'],
+         },
         ],
         password:[
-          {required: true, message: 'Please input your name', trigger: 'blur'}
+          {required: true, message: 'Please input your password', trigger: 'blur'}
         ],
       }
     }
   }
-
 }
 </script>
 
