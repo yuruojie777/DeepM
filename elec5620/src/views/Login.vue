@@ -1,16 +1,23 @@
 <template>
   <div class="logincon">
-    登录
-    <div>
-      <el-input placeholder="Account" label="Account" style="width:300px"></el-input>
-    </div>
-    <div>
-      <el-input placeholder="Password" label="Password" style="width:300px"></el-input>
-    </div>
-    <div>
-          <el-button style="width:100px" @click="gologin" type="primary">Login</el-button>
-          <el-button type="primary" @click="goregister">Register</el-button>
-    </div>
+    Login
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form-item label="Email" prop="email">
+        <el-input v-model="ruleForm.email"></el-input>
+      </el-form-item>
+      <el-form-item label="Password" prop="password">
+        <el-input v-model="ruleForm.password"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="goregister">
+          Sign in
+        </el-button>
+        <el-button type="primary" @click="gologin">
+          Log in
+        </el-button>
+      </el-form-item>
+
+    </el-form>
   </div>
 </template>
 
@@ -19,24 +26,53 @@ export default {
   name: "Login",
   methods:{
     goregister(){
-
       this.$router.push('/register')
       },
       gologin(){
-      this.$alert('You have successfully logged in.', 'Welcome', {
-        confirmButtonText: 'Confirm',
-  // callback: action => {
-  //        this.$message({
-  //          type: 'info',
-  //          message: `action: ${ action }`
-  //        });
- //      }
-      });
-        this.$router.push('/admin')
-
+      this.$refs.ruleForm.validate((valid)=>{
+      if(valid){
+      if(this.ruleForm.email === '4399@qq.com'&& this.ruleForm.password=== '4399')
+        {
+          this.$alert('You have successfully logged in.', 'Welcome', {
+            confirmButtonText: 'Confirm',
+          });
+          // callback: action => {
+          //        this.$message({
+          //          type: 'info',
+          //          message: `action: ${ action }`
+          //        });
+          //      }
+          this.$router.push('/admin')
+        }
+      else {
+       this.$alert('wrong password or email!')
       }
+      }
+      }
+      )
+      }
+  },
+  data(){
+    return{
+      ruleForm: {
+        email: '',
+        password:'',
+      },
+      rules: {
+       email: [
+          {required: true, message: 'Please input your name', trigger: 'blur'},
+         {
+           type: 'email',
+           message: 'Please input the right email adress',
+           trigger: ['blur', 'change'],
+         },
+        ],
+        password:[
+          {required: true, message: 'Please input your password', trigger: 'blur'}
+        ],
+      }
+    }
   }
-
 }
 </script>
 
