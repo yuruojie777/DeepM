@@ -19,6 +19,30 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+
+.title {
+  position: relative;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  padding-left: 10px;
+  /* display: inline-block; */
+  margin-bottom: 20px;
+}
+
+.title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: #3295fb;
+}
+
+.mt20{
+  margin-top: 20px;
+}
 </style>
 
 <!--*<img src="./assets/logo.png"-->
