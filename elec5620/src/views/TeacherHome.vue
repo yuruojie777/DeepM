@@ -6,8 +6,9 @@
       content="Teacher Home"
     ></el-page-header>
     <div class="title mt20">Teacher Home</div>
-    <el-row>
-      <!-- <el-col :span="8">
+    <div class="teacher-home-body">
+      <el-row>
+        <!-- <el-col :span="8">
         <el-descriptions title="UserInfo">
           <el-descriptions-item label="Name">好吃的汉堡</el-descriptions-item>
           <el-descriptions-item label="Email"
@@ -44,44 +45,42 @@
           </el-descriptions-item>
         </el-descriptions>
       </el-col> -->
-      <el-col :span="8">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>UserInfo</span>
-          </div>
-          <div class="text item">
-            <span>Name: </span>
-            <span>好吃的汉堡</span>
-          </div>
-          <div class="text item">
-            <span>Email: </span>
-            <span>xxx@163.com</span>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="8" :offset="1">
-        <el-card class="box-card" style="text-align: center">
-          <el-button
-            type="primary"
-            plain
-            @click="$router.push({ path: 'essayDetail' })"
-            >Historical release</el-button
+        <el-col :span="8">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>UserInfo</span>
+            </div>
+            <div class="text item">
+              <span>Name: </span>
+              <span>好吃的汉堡</span>
+            </div>
+            <div class="text item">
+              <span>Email: </span>
+              <span>xxx@163.com</span>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="8" v-for="(item, i) of btns" :key="i">
+          <el-card
+            class="box-card"
+            :class="[i == 0 ? 'bg-ecf5fc' : i == 1 ? 'bg-dfedfa' : 'bg-d3e2f7']"
           >
-          <el-button
-            type="info"
-            plain
-            @click="$router.push({ path: 'setEssay' })"
-            >Release the topic</el-button
-          >
-          <el-button
-            type="warning"
-            plain
-            @click="$router.push({ path: 'feedback' })"
-            >feedback</el-button
-          >
-        </el-card>
-      </el-col>
-    </el-row>
+            <div slot="header" class="clearfix">
+              <span>{{ item.title }}</span>
+              <el-button
+                style="float: right; padding: 3px 0"
+                type="text"
+                @click="$router.push({ path: item.path })"
+                >To learn more</el-button
+              >
+            </div>
+            <div class="text item">{{ item.desc }}</div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -90,6 +89,23 @@ export default {
   data() {
     return {
       currentDate: new Date(),
+      btns: [
+        {
+          path: "essayDetail",
+          title: "Historical release",
+          desc: "Check out the composition assigned earlier",
+        },
+        {
+          path: "setEssay",
+          title: "Release the topic",
+          desc: "Release new composition topics",
+        },
+        {
+          path: "feedback",
+          title: "Suggestions and Feedback",
+          desc: "Submit suggestions and feedback",
+        },
+      ],
     };
   },
   methods: {
@@ -107,6 +123,10 @@ export default {
   text-align: left;
   margin: 0 10vw;
   background: #fafafa;
+}
+
+.teacher-home-body {
+  padding-left: 30px;
 }
 
 .time {
@@ -166,5 +186,22 @@ export default {
 
 .box-card {
   width: 480px;
+}
+
+.bg-ecf5fc {
+  color: #333333;
+  background: #ecf5fc;
+}
+.bg-dfedfa {
+  color: #333333;
+  background: #dfedfa;
+}
+.bg-d3e2f7 {
+  color: #333333;
+  background: #d3e2f7;
+}
+
+.el-row + .el-row {
+  margin-top: 30px;
 }
 </style>
