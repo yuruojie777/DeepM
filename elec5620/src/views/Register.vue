@@ -75,6 +75,7 @@ export default {
   },
 
   methods:{
+
     gologin(){
       this.$router.push('/login')
     },
