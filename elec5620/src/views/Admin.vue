@@ -143,7 +143,7 @@
         </el-table-column>
         <el-table-column
 
-          label="Status"
+          label="Status(0 means disabled)"
           width="200"
         >
           <template slot-scope="scope"><span>{{scope.row.status}}</span></template>
@@ -220,7 +220,7 @@ export default {
           gender:'公',
           email:'123',
           usertype:'学生',
-          status:'normal',
+          status:'0',
         },
         {
           userid:'2',
@@ -228,7 +228,7 @@ export default {
           gender:'公',
           email:'1234',
           usertype:'学生',
-          status:'forbidden',
+          status:'0',
         },
         {
           userid:'3',
@@ -236,7 +236,7 @@ export default {
           gender:'公',
           email:'12345',
           usertype:'学生',
-          status:'normal',
+          status:'0',
         },
       ],
       feedback:[
