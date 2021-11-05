@@ -1,5 +1,6 @@
 package com.ele5620.deepm.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -13,17 +14,20 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
+
+
 public class TextcorrectwritingV3Demo {
 
     private static Logger logger = LoggerFactory.getLogger(TextcorrectwritingV3Demo.class);
 
-    private static final String YOUDAO_URL = "https://openapi.youdao.com/correct_writing_text";
+    public static final String YOUDAO_URL = "https://openapi.youdao.com/correct_writing_text";
 
     private static final String APP_KEY = "69e3dafdeadf5295";
 
@@ -31,8 +35,13 @@ public class TextcorrectwritingV3Demo {
 
     public static void main(String[] args) throws IOException {
 
+
+    }
+
+    public static Map<String, Object> requestForAIMarking(String essayContent) throws IOException {
+
         Map<String,String> params = new HashMap<String,String>();
-        String q = "待输入的文字";
+        String q = essayContent;
         String grade = "default";
         String salt = String.valueOf(System.currentTimeMillis());
         String curtime = String.valueOf(System.currentTimeMillis() / 1000);
@@ -45,11 +54,12 @@ public class TextcorrectwritingV3Demo {
         params.put("salt", salt);
         params.put("sign", sign);
         params.put("signType", "v3");
-        /** 处理结果 */
-        requestForHttp(YOUDAO_URL,params);
+
+        Map<String, Object> result = requestForHttp(YOUDAO_URL, params);
+        return result;
     }
 
-    public static void requestForHttp(String url,Map<String,String> params) throws IOException {
+    private static Map<String, Object> requestForHttp(String url,Map<String,String> params) throws IOException {
 
         /** 创建HttpClient */
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -81,12 +91,38 @@ public class TextcorrectwritingV3Demo {
                     byte2File(result,file);
                 }
             }else{
+
                 /** 响应不是音频流，直接显示结果 */
                 HttpEntity httpEntity = httpResponse.getEntity();
                 String json = EntityUtils.toString(httpEntity,"UTF-8");
                 EntityUtils.consume(httpEntity);
                 logger.info(json);
-                System.out.println(json);
+
+                JSONObject jsonObj = JSONObject.parseObject(json);
+                Map<String, Object> map = new HashMap<String, Object>();
+
+                JSONObject result = jsonObj.getJSONObject("Result");
+                JSONObject majorScore = result.getJSONObject("majorScore");
+
+                String essayAdvice = result.getString("essayAdvice");
+
+
+                Float wordScore = majorScore.getFloat("WordScore");
+                Float grammerScore = majorScore.getFloat("GrammarScore");
+                Float topicScore = majorScore.getFloat("topicScore");
+                Float structureScore = majorScore.getFloat("StructureScore");
+
+
+                Float totalScore = (wordScore + grammerScore + topicScore + structureScore) / 4;
+
+
+                map.put("grammarAdvice", essayAdvice);
+                map.put("wordScore", wordScore);
+                map.put("grammerScore", grammerScore);
+                map.put("topicScore", topicScore);
+                map.put("totalScore", totalScore);
+
+                return map;
             }
         }finally {
             try{
@@ -97,6 +133,8 @@ public class TextcorrectwritingV3Demo {
                 logger.info("## release resouce error ##" + e);
             }
         }
+
+        return null;
     }
 
     /**
@@ -159,4 +197,19 @@ public class TextcorrectwritingV3Demo {
         String result;
         return len <= 20 ? q : (q.substring(0, 10) + len + q.substring(len - 10, len));
     }
+
+//    private static JSONObject createJSONObject(String jsonString){
+//        JSONObject  jsonObject=new JSONObject();
+//        JSONParser jsonParser=new  JSONParser();
+//        if ((jsonString != null) && !(jsonString.isEmpty())) {
+//            try {
+//                jsonObject=(JSONObject) jsonParser.parse(jsonString);
+//            } catch (org.json.simple.parser.ParseException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return jsonObject;
+//    }
 }
+
+
