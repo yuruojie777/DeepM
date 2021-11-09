@@ -10,7 +10,11 @@ import SetEssay from "../views/SetEssay"
 import StudentEssay from "../views/StudentEssay"
 import EssayDetail from "../views/EssayDetail"
 import TeacherHome from "../views/TeacherHome"
-
+import StudentHome from "../views/StudentHome"
+import SubmissionList from "../views/SubmissionList";
+import Announcement from "../views/Announcement";
+import UpcomingEssay from "../views/UpcomingEssay";
+import SubmitEssay from "../views/SubmitEssay";
 Vue.use(Router)
 
 export default new Router({
@@ -66,6 +70,31 @@ export default new Router({
       path: '/teacherHome',
       name: '/TeacherHome',
       component: TeacherHome
+    },
+    {
+      path: '/studentHome',
+      name: '/StudentHome',
+      component: StudentHome
+    },
+    {
+      path: '/submissionList',
+      name: '/SubmissionList',
+      component: SubmissionList
+    },
+    {
+      path: '/announcement',
+      name: '/Announcement',
+      component: Announcement
+    },
+    {
+      path: '/upcomingEssay',
+      name: '/UpcomingEssay',
+      component: UpcomingEssay
+    },
+    {
+      path: '/submitEssay',
+      name: '/SubmitEssay',
+      component: SubmitEssay
     },
   ]
 
