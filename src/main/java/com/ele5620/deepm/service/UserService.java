@@ -1,11 +1,18 @@
 package com.ele5620.deepm.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.ele5620.deepm.controller.LoginController;
+import com.ele5620.deepm.dao.LoginTicketMapper;
 import com.ele5620.deepm.dao.UserMapper;
+import com.ele5620.deepm.entity.LoginTicket;
 import com.ele5620.deepm.entity.User;
 import com.ele5620.deepm.util.CommonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,71 +23,93 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     private String domain;
-
     private String contextPath;
-
     public User findUserById(int uid) {
         return userMapper.selectById(uid);
     }
+    public User findUserByEmail(String email) { return userMapper.selectByEmail(email);}
 
-
-    //register, for this part
-    //
-    public Map<String, Object> register(User user) {
-        Map<String, Object> map = new HashMap<>();
-
-        //if input is null
-        if(user == null) {
-            throw new IllegalArgumentException("The parameter can not be null");
-        }
-
-
-        //verify name
-        User  u = userMapper.selectByName(user.getName());
-        if(u != null){
-            map.put("userNameMsg", "Username already exist");
-            System.out.println("Username already exist");
-            return map;
-        }
+    public Map<String, String> register(User user) {
+        Map<String, String> map = new HashMap<>();
 
         //verify email
-        u = userMapper.selectByEmail(user.getEmail());
+        User u = userMapper.selectByEmail(user.getEmail());
         if(u != null){
-            map.put("emailMsg", "Email already exist");
+            map.put("status", "Email already exist");
             return map;
         }
+
 
         //register
         user.setSalt(CommonUtil.generateUUID().substring(0,5));
-
         user.setPassword(CommonUtil.md5(user.getPassword() + user.getSalt()));
         user.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        user.setRole(1);
         user.setStatus(0);
         user.setAvatar("http:123.56.59.240:8080/avatar/c611b87517514bcc81497699f894985d.png");
-
-
-//        userMapper.insertUser(forumUser);
-//        int uid = userMapper.selectByEmail(forumUser.getEmail()).getUid();
-//        //activation email
-//        Context context = new Context();
-//        context.setVariable("email", forumUser.getEmail());
-//        //http://localhost:8080/community/activation/101/code
-//        String url = domain + contextPath+"/activation/" + uid +  '/' + forumUser.getActivationCode();
-//        context.setVariable("url",url);
-//        System.out.println(url);
-//        String content = templateEngine.process("mail/activation", context);
-//        mailClient.sendMail(forumUser.getEmail(), "Activate account", content);
-
+        userMapper.insertUser(user);
+        map.put("status", "success");
         return map;
     }
 
 
-    public Map<String, Object> login(String email, String password, int type) {
-        User user = userMapper.selectByEmail(email);
+    //login
+    public Map<String, Object> login(User user) {
 
-        return null;
+        Map<String, Object> result = new HashMap<>();
+        User appuser = userMapper.selectByEmail(user.getEmail());
+        if(appuser == null) {
+            result.put("status", "user doesn't exist");
+            System.out.println(result);
+            return result;
+        }
+        if(!appuser.getPassword().equals(CommonUtil.md5(user.getPassword() + appuser.getSalt()))){
+            result.put("status", "password is not correct");
+            System.out.println(result);
+            return result;
+        }
+
+        result.put("status", "success");
+        result.put("role", user.getRole());
+        System.out.println(result);
+
+        //add loginTicket to table
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUid(user.getUid());
+        loginTicket.setTicket(CommonUtil.generateUUID());
+        loginTicket.setStatus(0);
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + 3600 * 12 * 1000));
+        loginTicketMapper.insertLoginTicket(loginTicket);
+
+        result.put("ticket", loginTicket.getTicket());
+        return result;
+    }
+
+    //change password
+    public Map<String, Object> changePassword(int id, String pwd) {
+        Map<String, Object> result = new HashMap<>();
+        User user = userMapper.selectById(id);
+        if(user == null){
+            result.put("status", "user doesn't exist");
+            return result;
+        }
+        if(pwd == null) {
+            result.put("status", "password can not be null");
+            return result;
+        }
+        user.setPassword(CommonUtil.md5(pwd + user.getSalt()));
+        userMapper.updateUserPassword(id, pwd);
+        result.put("status", "success");
+        result.put("role", user.getRole());
+        System.out.println(user.getRole());
+        return result;
+    }
+
+    public LoginTicket findLoginTicket(String ticket) {
+        return loginTicketMapper.selectByTicket(ticket);
     }
 
 }

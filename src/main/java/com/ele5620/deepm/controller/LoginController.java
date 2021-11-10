@@ -1,39 +1,84 @@
 package com.ele5620.deepm.controller;
 import com.ele5620.deepm.entity.User;
+import com.ele5620.deepm.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.sql.Timestamp;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:8080")
-@RequestMapping("/api/user")
 @RestController
 public class LoginController {
-    @PostMapping
-    public Map<String, Object> addpersion(@RequestBody Map<String,Object> map){
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody Map<String,Object> map, HttpSession session, HttpServletResponse response){
         Map result = new HashMap<String, Object>();
-        result.put("status", "ok");
-        return map;
-    }
-
-    @GetMapping
-    public User showUser() {
+        if(map.get("email") == null) {
+            result.put("status", "email can not be null");
+            return result;
+        }
+        if(map.get("password") == null) {
+            result.put("status", "password can not be null");
+            return result;
+        }
+        String email = (String)map.get("email");
+        String password = (String)map.get("password");
         User user = new User();
-        user.setUid(1);
-        user.setRole(1);
-        user.setAvatar("aaa");
-        user.setPassword("123");
-        user.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        user.setStatus(1);
-        user.setSalt("1");
-        user.setEmail("ssfsfs");
-        user.setGender(1);
-        user.setName("yu");
-        return user;
+        user.setEmail(email);
+        user.setPassword(password);
+
+        System.out.println(email);
+        System.out.println(password);
+        result = userService.login(user);
+
+        //if exists, then add to cookie
+        if(result.containsKey("ticket")) {
+            Cookie cookie = new Cookie("ticket", result.get("ticket").toString());
+            cookie.setPath("/deepm");
+            cookie.setMaxAge(3600 * 12);
+            response.addCookie(cookie);
+        }
+        return result;
     }
 
-    @PutMapping
-    public void changeUser() {
+    @PostMapping("/register")
+    public Map<String, String> register(@RequestBody Map<String,Object> map) {
+        Map<String, String> result = new HashMap<String, String>();
+        System.out.println(map);
+        if(map.get("email") == null) {
+            result.put("status", "email can not be null");
+            return result;
+        }
+        if(map.get("name") == null) {
+            result.put("status", "name can not be null");
+            return result;
+        }
+        if(map.get("password") == null) {
+            result.put("status", "password can not be null");
+            return result;
+        }
+        if(map.get("gender") == null) {
+            result.put("status", "gender can not be null");
+            return result;
+        }
+        String email = (String)map.get("email");
+        String name = (String)map.get("name");
+        String password = (String) map.get("password");
+        int gender = Integer.parseInt((String) map.get("gender"));
+        User user = new User();
+        user.setEmail(email);
+        user.setName(name);
+        user.setPassword(password);
+        user.setGender(gender);
+        result = userService.register(user);
 
+        return result;
     }
 }

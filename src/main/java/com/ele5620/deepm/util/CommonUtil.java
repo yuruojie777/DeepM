@@ -43,6 +43,6 @@ public class CommonUtil {
 //        map.put("name", "haha");
 //        map.put("age", 32);
 //        System.out.println(getJSONString(0,"ok",map));
-        System.out.println(CommonUtil.md5("hello" + "eaabe"));
+        System.out.println(CommonUtil.md5("123456" + "eaabe"));
     }
 }

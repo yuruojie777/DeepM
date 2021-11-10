@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ele5620.deepm.dao.UserMapper">
+    <sql id="selectFields">
+        uid, role, name, email, password, avatar, salt, gender, createtime , status
+    </sql>
+    <sql id="insertFields">
+        role, name, email, password, avatar, salt, gender, createtime , status
+    </sql>
+
+    <select id="selectByEmail" resultType="User">
+        select <include refid="selectFields"></include>
+        from appuser
+        where email = #{email}
+    </select>
+
+
+    <insert id="insertUser" parameterType="User" keyProperty="uid">
+        insert into appuser (<include refid="insertFields"></include>)
+        values(#{role}, #{name}, #{email}, #{password}, #{avatar}, #{salt}, #{gender}, #{createTime}, #{status})
+    </insert>
+
+    <update id="updateUserPassword" parameterType="User" keyProperty="uid">
+        update appuser set password = #{password} where uid = #{id}
+    </update>
+</mapper>
