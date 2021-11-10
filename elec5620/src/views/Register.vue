@@ -15,10 +15,10 @@
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
       <el-form-item label="Password" prop="password1">
-        <el-input v-model="ruleForm.password1"></el-input>
+        <el-input v-model="ruleForm.password1" show-password></el-input>
       </el-form-item>
       <el-form-item label="Confirm password" prop="password2">
-        <el-input v-model="ruleForm.password2"></el-input>
+        <el-input v-model="ruleForm.password2" show-password></el-input>
       </el-form-item>
       <el-form-item label="Gender" prop="gender">
         <el-radio v-model="ruleForm.gender" label="male">male</el-radio>

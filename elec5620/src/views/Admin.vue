@@ -3,18 +3,18 @@
 
     <el-tab-pane label="1.Personal Information" name="first">
       <div class="information">
-        <el-form :model="Form" class="demo-information">
+        <el-form class="demo-information">
           <el-form-item>
             Welcome administrator!
           </el-form-item>
           <el-form-item label="Name:" style="background: aquamarine">
-            {{adminname}}
+            {{this.adminForm.adminname}}
           </el-form-item>
           <el-form-item label="Email:" style="background: aquamarine">
-            {{adminemail}}
+            {{this.adminForm.adminemail}}
           </el-form-item>
           <el-form-item label="Gender:" style="background: aquamarine">
-            {{admingender}}
+            {{this.adminForm.admingender}}
           </el-form-item>
         </el-form>
       </div>
@@ -182,9 +182,11 @@ export default {
     return {
       searchessays:'',
       searchUser:'',
-      adminname:'JohnWick',
-      adminemail:'4399@qq.com',
-      admingender:'Male',
+      adminForm:{
+        adminname:'JohnWick',
+        adminemail:'4399@qq.com',
+        admingender:'Male',
+      },
       activeName: 'first',
       ruleForm: {
         name: '',
