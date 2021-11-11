@@ -12,6 +12,7 @@
             <div slot="header" class="clearfix">
               <span>Student Info</span>
             </div>
+
             <div class="text item">
               <span>Name: </span>
               <span>Gilbert</span>
@@ -20,6 +21,7 @@
               <span>Email: </span>
               <span>xxx@163.com</span>
             </div>
+            <el-button type="primary" @click="gofeedback">feedback</el-button>
           </el-card>
         </el-col>
       </el-row>
@@ -74,6 +76,9 @@ export default {
     goBack() {
       console.log("go back");
       this.$router.go(-1);
+    },
+    gofeedback(){
+      this.$router.push('/Feedback')
     },
   },
 };

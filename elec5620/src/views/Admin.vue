@@ -167,9 +167,10 @@ export default {
     return {
       searchessays:'',
       searchUser:'',
-      adminname:'JohnWick',
-      adminemail:'4399@qq.com',
-      admingender:'Male',
+      ticket:'',
+      adminname:'',
+      adminemail:'',
+      admingender:'',
       activeName: 'first',
       ruleForm: {
         name: '',
@@ -259,6 +260,21 @@ export default {
     };
   },
   methods: {
+    getinfo(){
+     this.ticket = localStorage.getItem('ticket')
+      console.log(this.ticket)
+      this.$axios.get('/user/id/?ticket='+ this.ticket)
+      .then(res=>{
+        console.log(res);
+        this.adminname=res.data.user.name
+        this.adminemail=res.data.user.email
+          if(res.data.user.gender==1){ this.admingender='male'}
+          else{ this.admingender='female'}
+      })
+        .catch(function (error) {
+          console.log(error);
+        })
+    },
     handleClick(tab, event) {
       console.log(tab, event);
     },
@@ -281,6 +297,20 @@ export default {
           });
       })
     },
+    getalluser(){
+      this.$axios.get()
+      .then(res=>{
+        this.userData=res.data
+      })
+        .catch(function (error) {
+          console.log(error);
+        })
+    },
+  },
+
+  mounted() {
+   this.getinfo()
+    this.getalluser()
   }
 }
 </script>
