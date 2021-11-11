@@ -1,10 +1,14 @@
 <template>
   <div class="trueson">
+    <el-container>
+      <el-aside width="800px">
     <div class="logo">
-
+<el-image class="login-pic" :src="require('../../src/img/logo.png')"></el-image>
     </div>
+      </el-aside>
+    <el-main>
   <div class="login-container">
-    Login
+
     <el-form :model="loginForm" :rules="loginRules" ref="loginFormRef" label-width="100px" class="loginForm"  @keyup.enter.native="login">
   <!--      email-->
         <el-form-item label="Email" prop="email">
@@ -26,6 +30,8 @@
 
     </el-form>
   </div>
+    </el-main>
+    </el-container>
   </div>
 </template>
 
@@ -96,7 +102,10 @@ export default {
 .trueson {
 
 }
-
+.logo{
+  margin-top: 200px;
+  margin-left: 200px;
+}
 
 .login-container {
   -webkit-border-radius: 5px;
