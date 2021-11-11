@@ -20,6 +20,19 @@
             </el-input>
           </el-col>
         </el-row>
+        <el-row style="margin-top:20px">
+          <el-col :span="12" :offset="0">
+            <el-date-picker
+              v-model="date"
+              type="daterange"
+              range-separator="to"
+              start-placeholder="Start date"
+              end-placeholder="End date"
+              value-format="yyyy-MM-dd"
+            >
+            </el-date-picker>
+          </el-col>
+        </el-row>
         <el-input
           type="textarea"
           :rows="9"
@@ -30,7 +43,9 @@
         </el-input>
         <el-row :gutter="20" style="margin-top: 20px">
           <el-col :span="2" :push="21">
-            <el-button type="primary" size="default" @click="submitFn">submit</el-button>
+            <el-button type="primary" size="default" @click="submitFn"
+              >submit</el-button
+            >
           </el-col>
         </el-row>
       </div>
@@ -44,6 +59,7 @@ export default {
     return {
       score: "",
       textarea: "",
+      date: ""
     };
   },
   methods: {
