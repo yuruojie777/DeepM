@@ -11,6 +11,11 @@
         sid, tid, title, content, grade, level, status, comment , submittime, deadline
     </sql>
 
+    <select id="selectAllEssay" resultType="Essay">
+        select <include refid="selectFields"></include>
+        from essay
+    </select>
+
     <select id="selectByEssayId" resultType="Essay">
         select <include refid="selectFields"></include>
         from essay
@@ -20,7 +25,7 @@
     <select id="selectBySid" resultType="Essay">
         select <include refid="selectFields"></include>
         from essay
-        where sid = #{sid}
+        where sid = #{sid} and status = #{status}
     </select>
 
     <select id="selectByTid" resultType="Essay">

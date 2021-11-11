@@ -18,9 +18,12 @@ public class EssayController {
     @Autowired
     private EssayService essayService;
 
+    @GetMapping("/all")
+    public Map<String, Object> viewAllEssay() { return essayService.findAllEssay();}
+
     @GetMapping("/student")
-    public Map<String, Object> viewStudentEssay(int sid){
-        return essayService.findEssayBySid(sid);
+    public Map<String, Object> viewStudentEssay(int sid, int status){
+        return essayService.findEssayBySid(sid, status);
     }
 
     @GetMapping("/teacher")
@@ -28,7 +31,7 @@ public class EssayController {
         return essayService.findEssayByTid(tid);
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public Map<String, Object> searchByKeyWord(@RequestParam String search) {
         return essayService.findEssayByTitle(search);
     }
@@ -59,22 +62,19 @@ public class EssayController {
         return map;
     }
     @DeleteMapping
-    public Map<String, Object> deleteEssay(@RequestBody int essayid) {
+    public Map<String, Object> deleteEssay(@RequestParam int essayid) {
         return essayService.deleteEssay(essayid);
     }
 
     @PutMapping("/grade")
-    public Map<String, Object> updateEssayGrade(@RequestBody int essayid, int grade) {
-        return essayService.updateEssayGrade(essayid, grade);
-    }
-
-    @PutMapping("/comment")
-    public Map<String, Object> updateEssayGrade(@RequestBody int essayid, String comment) {
-        return essayService.updateEssayComment(essayid, comment);
-    }
-
-    @PutMapping("/status")
-    public Map<String, Object> updateEssayStatus(@RequestBody int essayid, int status) {
-        return essayService.updateEssayStatus(essayid, status);
+    public Map<String, Object> updateEssayGrade(@RequestParam int essayid, int grade, String comment) {
+        Map<String, Object> map = new HashMap<>();
+        System.out.println(grade);
+        System.out.println(comment);
+        essayService.updateEssayGrade(essayid, grade);
+        essayService.updateEssayComment(essayid, comment);
+        essayService.updateEssayStatus(essayid, 3);
+        map.put("data", "success");
+        return map;
     }
 }

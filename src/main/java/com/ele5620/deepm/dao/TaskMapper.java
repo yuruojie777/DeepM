@@ -8,6 +8,7 @@ import java.util.List;
 @Mapper
 public interface TaskMapper {
     List<Task> selectByTeacherId(int teacherid);
+    List<Task> selectByStudentId(int sid, int status);
     List<Task> selectByTitle(String title);
     Task selectByTaskId(int tid);
     int insertTask(Task task);

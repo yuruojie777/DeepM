@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -32,6 +34,7 @@ public class UserService {
         return userMapper.selectById(uid);
     }
     public User findUserByEmail(String email) { return userMapper.selectByEmail(email);}
+    public List<User> findAllUser() {return userMapper.selectAllUser();}
 
     public Map<String, Object> register(User user) {
         Map<String, Object> map = new HashMap<>();
@@ -51,6 +54,12 @@ public class UserService {
         user.setStatus(0);
         user.setAvatar("http:123.56.59.240:8080/avatar/c611b87517514bcc81497699f894985d.png");
         userMapper.insertUser(user);
+        user = userMapper.selectByEmail(user.getEmail());
+        if(user.getRole() == 0) {
+            List<User> teacherList = userMapper.selectByRole(1);
+            Collections.shuffle(teacherList);
+            userMapper.insertRelation(user.getUid(), teacherList.get(0).getUid());
+        }
         map.put("status", "success");
         map.put("data", user);
         return map;
@@ -158,6 +167,7 @@ public class UserService {
             result.put("status", "user doesn't exist");
             return result;
         }
+
         user.setStatus(status);
         userMapper.updateUserStatus(id, status);
         result.put("status", "success");

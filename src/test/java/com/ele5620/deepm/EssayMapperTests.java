@@ -38,7 +38,7 @@ public class EssayMapperTests {
 
     @Test
     public void testSelect() {
-        List<Essay> essays = essayMapper.selectBySid(1);
+        List<Essay> essays = essayMapper.selectBySid(1, 0);
         for(Essay essay : essays){
             System.out.println(essay);
         }

@@ -11,6 +11,11 @@
         role, name, email, password, avatar, salt, gender, createtime , status
     </sql>
 
+    <select id="selectAllUser" resultType="User">
+        select <include refid="selectFields"></include>
+        from appuser
+    </select>
+
     <select id="selectByEmail" resultType="User">
         select <include refid="selectFields"></include>
         from appuser
@@ -23,10 +28,20 @@
         where uid = #{id}
     </select>
 
+    <select id="selectByRole" resultType="User">
+        select <include refid="selectFields"></include>
+        from appuser
+        where role = #{role}
+    </select>
 
     <insert id="insertUser" parameterType="User" keyProperty="uid">
         insert into appuser (<include refid="insertFields"></include>)
         values(#{role}, #{name}, #{email}, #{password}, #{avatar}, #{salt}, #{gender}, #{createTime}, #{status})
+    </insert>
+
+    <insert id="insertRelation" keyProperty="uid">
+        insert into student_teacher (sid, tid)
+        values(#{sid}, #{tid})
     </insert>
 
     <update id="updateUserPassword" parameterType="User" keyProperty="uid">
@@ -43,7 +58,7 @@
     </update>
 
     <update id="updateUserStatus" parameterType="User" keyProperty="uid">
-        update appuser set password = #{status} where uid = #{id}
+        update appuser set status = #{status} where uid = #{id}
     </update>
 
     <delete id="deleteUser" parameterType="User">

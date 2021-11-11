@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:8080")
@@ -16,6 +17,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("/all")
+    public Map<String, Object> viewAllUser() {
+        Map<String, Object> map = new HashMap<>();
+        List<User> userList = userService.findAllUser();
+        map.put("data", userList);
+        map.put("status","success");
+        return map;
+    }
 
     @GetMapping
     public Map<String, Object> viewUser(@RequestParam int id) {
@@ -43,19 +53,22 @@ public class UserController {
             map.put("status","ticket expired");
             return map;
         }
-        map.put("id", loginTicket.getUid());
+        map.put("user", userService.findUserById(loginTicket.getUid()));
         map.put("status","success");
         return map;
     }
 
-    @PutMapping("status")
+    @PutMapping("/status")
     public Map<String, Object> changeStatus(@RequestParam int id, int status) {
+        System.out.println(id);
+        System.out.println(status);
         Map<String, Object> map = new HashMap<>();
         User user = userService.findUserById(id);
         if(user == null) {
             map.put("status", "no such user");
             return map;
         }
+//        int code = Integer.parseInt(status);
         return userService.changeStatus(id, status);
     }
 

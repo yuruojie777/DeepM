@@ -44,7 +44,7 @@ public class LoginController {
             Cookie cookie1 = new Cookie("role", result.get("role").toString());
             Cookie cookie2 = new Cookie("id", result.get("id").toString());
             cookie.setPath("/deepm");
-            cookie.setMaxAge(3600 * 12);
+            cookie.setMaxAge(3600 * 12 * 1000);
             response.addCookie(cookie);
             response.addCookie(cookie1);
             response.addCookie(cookie2);

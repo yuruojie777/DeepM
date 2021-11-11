@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ele5620.deepm.dao.FeedbackMapper">
+    <sql id="selectFields">
+        fid, toid, fromid, content, createtime
+    </sql>
+    <sql id="insertFields">
+        toid, fromid, content, createtime
+    </sql>
+
+    <select id="selectAllFeedback" resultType="Feedback">
+        select <include refid="selectFields"></include>
+        from feedback
+    </select>
+
+    <select id="selectFeedbackByFid" resultType="Feedback">
+        select <include refid="selectFields"></include>
+        from feedback
+        where fid = #{fid}
+    </select>
+
+    <select id="selectFeedbackByToid" resultType="Feedback">
+        select <include refid="selectFields"></include>
+        from feedback
+        where toid = #{toid}
+    </select>
+
+    <select id="selectFeedbackByFromid" resultType="Feedback">
+        select <include refid="selectFields"></include>
+        from feedback
+        where fromid like #{fromid}
+    </select>
+
+
+    <insert id="insertFeedback" parameterType="Feedback" keyProperty="fid">
+        insert into feedback (<include refid="insertFields"></include>)
+        values(#{toid}, #{fromid}, #{content}, #{createtime})
+    </insert>
+
+
+    <delete id="deleteFeedback" parameterType="Feedback">
+        delete from feedback where fid = #{fid}
+    </delete>
+</mapper>

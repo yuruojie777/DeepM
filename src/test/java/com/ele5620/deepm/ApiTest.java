@@ -22,7 +22,7 @@ public class ApiTest {
 
     @Test
     public void testAiMarker(){
-        for(Essay essay: essayMapper.selectBySid(1)){
+        for(Essay essay: essayMapper.selectBySid(1, 0)){
             try{
                 System.out.println(essayService.post(essay));
             } catch (Exception e){

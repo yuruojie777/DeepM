@@ -21,15 +21,23 @@ public class EssayService {
     private EssayMapper essayMapper;
 
     public Map<String, Object> post(Essay essay) throws IOException {
+
         return TextcorrectwritingV3Demo.requestForAIMarking(essay.getContent());
+    }
+
+    public Map<String, Object> findAllEssay(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", essayMapper.selectAllEssay());
+        map.put("status","success");
+        return map;
     }
 
 
     public Essay findEssayByEssayid(int essayid){
         return essayMapper.selectByEssayId(essayid);
     }
-    public Map<String, Object> findEssayBySid(int sid){
-        List<Essay> essayList =  essayMapper.selectBySid(sid);
+    public Map<String, Object> findEssayBySid(int sid, int status){
+        List<Essay> essayList =  essayMapper.selectBySid(sid, status);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("data", essayList);
         map.put("status","success");
@@ -52,6 +60,7 @@ public class EssayService {
         map.put("status", "success");
         return map;
     }
+
     public Map<String, Object> addEssay( Map<String, Object> form){
 
         Essay essay = new Essay();
@@ -59,7 +68,7 @@ public class EssayService {
         String content = (String)form.get("content");
         System.out.println(title);
         System.out.println(content);
-        int sid = (int)form.get("sid");
+        int sid = Integer.parseInt((String)form.get("sid"));
         essay.setTitle(title);
         essay.setContent(content);
         essay.setSubmitTime(new Timestamp(System.currentTimeMillis()));
@@ -90,46 +99,47 @@ public class EssayService {
         return map;
     }
 
-    public Map<String, Object> updateEssayComment(int essayid, String comment) {
+    public void updateEssayComment(int essayid, String comment) {
         Map<String, Object> map = new HashMap<>();
         Essay essay = essayMapper.selectByEssayId(essayid);
         if(essay == null) {
             map.put("status", "essay doesn't exist");
-            return map;
+            return;
         }
         essay.setComment(comment);
         essayMapper.updateComment(essayid, comment);
         map.put("status", "success");
         map.put("data", essay);
-        return map;
+        return;
     }
 
-    public Map<String, Object> updateEssayGrade(int essayid, int grade) {
+    public void updateEssayGrade(int essayid, int grade) {
         Map<String, Object> map = new HashMap<>();
         Essay essay = essayMapper.selectByEssayId(essayid);
         if(essay == null) {
             map.put("status", "essay doesn't exist");
-            return map;
+            return;
         }
         essay.setGrade(grade);
+        System.out.println(grade);
         essayMapper.updateGrade(essayid, grade);
         map.put("status", "success");
         map.put("data", essay);
-        return map;
+        return;
     }
 
 
-    public Map<String, Object> updateEssayStatus(int essayid, int status) {
+    public void updateEssayStatus(int essayid, int status) {
         Map<String, Object> map = new HashMap<>();
         Essay essay = essayMapper.selectByEssayId(essayid);
         if(essay == null) {
             map.put("status", "essay doesn't exist");
-            return map;
+            return;
         }
         essay.setStatus(status);
         essayMapper.updateGrade(essayid, status);
         map.put("status", "success");
         map.put("data", essay);
-        return map;
+        return;
     }
 }

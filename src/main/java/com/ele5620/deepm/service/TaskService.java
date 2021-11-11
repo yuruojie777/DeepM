@@ -24,6 +24,14 @@ public class TaskService {
         return map;
     }
 
+    public Map<String, Object> findTaskByStudentId(int sid, int status){
+        Map<String, Object> map = new HashMap<>();
+        List<Task> taskList = taskMapper.selectByStudentId(sid, status);
+        map.put("data", taskList);
+        map.put("status", "success");
+        return map;
+    }
+
     public Map<String, Object> findTaskByTitle(String title){
         Map<String, Object> map = new HashMap<>();
         List<Task> taskList = taskMapper.selectByTitle("%"+title+"%");

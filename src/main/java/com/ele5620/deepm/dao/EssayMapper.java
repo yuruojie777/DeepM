@@ -7,13 +7,14 @@ import java.util.List;
 
 @Mapper
 public interface EssayMapper {
-    List<Essay> selectBySid(int sid);
+    List<Essay> selectAllEssay();
+    List<Essay> selectBySid(int sid, int status);
     List<Essay> selectByTid(int tid);
     List<Essay> selectByTitle(String title);
     Essay selectByEssayId(int essayid);
     int insertEssay(Essay essay);
 
-    int updateGrade(int essayid, float grade);
+    int updateGrade(int essayid, int grade);
     int updateComment(int essayid, String comment);
 
     int deleteEssay(int essayid);

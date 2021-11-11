@@ -5,10 +5,10 @@
 
 <mapper namespace="com.ele5620.deepm.dao.TaskMapper">
     <sql id="selectFields">
-        tid, teacherid, title, content, releasetime
+        tid, teacherid, title, content, releasetime, endtime
     </sql>
     <sql id="insertFields">
-        teacherid, title, content, releasetime
+        teacherid, title, content, releasetime, endtime
     </sql>
 
     <select id="selectByTaskId" resultType="Task">
@@ -23,6 +23,12 @@
         where teacherid = #{teacherid}
     </select>
 
+    <select id="selectByStudentId" resultType="Task">
+        select task.tid, teacherid, task.title, task.content, releasetime, endtime
+        from task left join essay on task.tid = essay.tid
+        where sid = #{sid} and status = #{status}
+    </select>
+
     <select id="selectByTitle" resultType="Task">
         select <include refid="selectFields"></include>
         from task
@@ -32,7 +38,7 @@
 
     <insert id="insertTask" parameterType="Task" keyProperty="tid">
         insert into task (<include refid="insertFields"></include>)
-        values(#{teacherid}, #{title}, #{content}, #{releasetime})
+        values(#{teacherid}, #{title}, #{content}, #{releasetime}, #{endtime})
     </insert>
 
 

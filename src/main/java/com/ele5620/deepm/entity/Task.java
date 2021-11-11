@@ -1,13 +1,15 @@
 package com.ele5620.deepm.entity;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class Task {
     private int tid;
     private int teacherid;
     private String title;
     private String content;
-    private Timestamp releasetime;
+    private Date releasetime;
+    private Date endtime;
 
     public int getTid() {
         return tid;
@@ -41,12 +43,20 @@ public class Task {
         this.content = content;
     }
 
-    public Timestamp getReleasetime() {
+    public Date getReleasetime() {
         return releasetime;
     }
 
-    public void setReleasetime(Timestamp releasetime) {
+    public void setReleasetime(Date releasetime) {
         this.releasetime = releasetime;
+    }
+
+    public Date getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(Date endtime) {
+        this.endtime = endtime;
     }
 
     @Override
@@ -57,6 +67,7 @@ public class Task {
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", releasetime=" + releasetime +
+                ", endtime=" + endtime +
                 '}';
     }
 }

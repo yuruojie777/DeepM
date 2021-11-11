@@ -56,6 +56,7 @@ public class TextcorrectwritingV3Demo {
         params.put("signType", "v3");
 
         Map<String, Object> result = requestForHttp(YOUDAO_URL, params);
+        result.put("essay", essayContent);
         return result;
     }
 
@@ -104,6 +105,7 @@ public class TextcorrectwritingV3Demo {
             Float totalScore = (wordScore + grammerScore + topicScore + structureScore) / 4;
 
 
+//            map.put("essay", )
             map.put("grammarAdvice", essayAdvice);
             map.put("wordScore", wordScore);
             map.put("grammerScore", grammerScore);
