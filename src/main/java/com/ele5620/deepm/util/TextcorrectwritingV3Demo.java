@@ -79,51 +79,39 @@ public class TextcorrectwritingV3Demo {
         try{
             Header[] contentType = httpResponse.getHeaders("Content-Type");
             logger.info("Content-Type:" + contentType[0].getValue());
-            if("audio/mp3".equals(contentType[0].getValue())){
-                //如果响应是wav
-                HttpEntity httpEntity = httpResponse.getEntity();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                httpResponse.getEntity().writeTo(baos);
-                byte[] result = baos.toByteArray();
-                EntityUtils.consume(httpEntity);
-                if(result != null){//合成成功
-                    String file = "合成的音频存储路径"+System.currentTimeMillis() + ".mp3";
-                    byte2File(result,file);
-                }
-            }else{
 
-                /** 响应不是音频流，直接显示结果 */
-                HttpEntity httpEntity = httpResponse.getEntity();
-                String json = EntityUtils.toString(httpEntity,"UTF-8");
-                EntityUtils.consume(httpEntity);
-                logger.info(json);
+            /** 响应不是音频流，直接显示结果 */
+            HttpEntity httpEntity = httpResponse.getEntity();
+            String json = EntityUtils.toString(httpEntity,"UTF-8");
+            EntityUtils.consume(httpEntity);
+            logger.info(json);
 
-                JSONObject jsonObj = JSONObject.parseObject(json);
-                Map<String, Object> map = new HashMap<String, Object>();
+            JSONObject jsonObj = JSONObject.parseObject(json);
+            Map<String, Object> map = new HashMap<String, Object>();
 
-                JSONObject result = jsonObj.getJSONObject("Result");
-                JSONObject majorScore = result.getJSONObject("majorScore");
+            JSONObject result = jsonObj.getJSONObject("Result");
+            JSONObject majorScore = result.getJSONObject("majorScore");
 
-                String essayAdvice = result.getString("essayAdvice");
+            String essayAdvice = result.getString("essayAdvice");
 
 
-                Float wordScore = majorScore.getFloat("WordScore");
-                Float grammerScore = majorScore.getFloat("GrammarScore");
-                Float topicScore = majorScore.getFloat("topicScore");
-                Float structureScore = majorScore.getFloat("StructureScore");
+            Float wordScore = majorScore.getFloat("WordScore");
+            Float grammerScore = majorScore.getFloat("GrammarScore");
+            Float topicScore = majorScore.getFloat("topicScore");
+            Float structureScore = majorScore.getFloat("StructureScore");
 
 
-                Float totalScore = (wordScore + grammerScore + topicScore + structureScore) / 4;
+            Float totalScore = (wordScore + grammerScore + topicScore + structureScore) / 4;
 
 
-                map.put("grammarAdvice", essayAdvice);
-                map.put("wordScore", wordScore);
-                map.put("grammerScore", grammerScore);
-                map.put("topicScore", topicScore);
-                map.put("totalScore", totalScore);
+            map.put("grammarAdvice", essayAdvice);
+            map.put("wordScore", wordScore);
+            map.put("grammerScore", grammerScore);
+            map.put("topicScore", topicScore);
+            map.put("totalScore", totalScore);
 
-                return map;
-            }
+            return map;
+
         }finally {
             try{
                 if(httpResponse!=null){
@@ -133,8 +121,6 @@ public class TextcorrectwritingV3Demo {
                 logger.info("## release resouce error ##" + e);
             }
         }
-
-        return null;
     }
 
     /**

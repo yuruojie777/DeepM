@@ -33,8 +33,8 @@ public class UserService {
     }
     public User findUserByEmail(String email) { return userMapper.selectByEmail(email);}
 
-    public Map<String, String> register(User user) {
-        Map<String, String> map = new HashMap<>();
+    public Map<String, Object> register(User user) {
+        Map<String, Object> map = new HashMap<>();
 
         //verify email
         User u = userMapper.selectByEmail(user.getEmail());
@@ -52,6 +52,7 @@ public class UserService {
         user.setAvatar("http:123.56.59.240:8080/avatar/c611b87517514bcc81497699f894985d.png");
         userMapper.insertUser(user);
         map.put("status", "success");
+        map.put("data", user);
         return map;
     }
 
@@ -73,7 +74,7 @@ public class UserService {
         }
 
         result.put("status", "success");
-        result.put("role", user.getRole());
+        result.put("role", appuser.getRole());
         System.out.println(result);
 
         //add loginTicket to table
@@ -103,13 +104,72 @@ public class UserService {
         user.setPassword(CommonUtil.md5(pwd + user.getSalt()));
         userMapper.updateUserPassword(id, pwd);
         result.put("status", "success");
-        result.put("role", user.getRole());
+        result.put("data", user);
         System.out.println(user.getRole());
+        return result;
+    }
+
+    //change name
+    public Map<String, Object> changeUserName(int id, String username) {
+        Map<String, Object> result = new HashMap<>();
+        User user = userMapper.selectById(id);
+        if(user == null){
+            result.put("status", "user doesn't exist");
+            return result;
+        }
+        if(username == null) {
+            result.put("status", "username can not be null");
+            return result;
+        }
+        user.setPassword(username);
+        userMapper.updateUserName(id, username);
+        result.put("status", "success");
+        result.put("data", user);
+        return result;
+    }
+
+
+    //change avatar
+    public Map<String, Object> changeAvatar(int id, String avatarURL) {
+        Map<String, Object> result = new HashMap<>();
+        User user = userMapper.selectById(id);
+        if(user == null){
+            result.put("status", "user doesn't exist");
+            return result;
+        }
+        if(avatarURL == null) {
+            result.put("status", "password can not be null");
+            return result;
+        }
+        user.setAvatar(avatarURL);
+        userMapper.updateUserAvatar(id, avatarURL);
+        result.put("status", "success");
+        result.put("data", user);
+        return result;
+    }
+
+
+    //change status
+    public Map<String, Object> changeStatus(int id, int status) {
+        Map<String, Object> result = new HashMap<>();
+        User user = userMapper.selectById(id);
+        if(user == null){
+            result.put("status", "user doesn't exist");
+            return result;
+        }
+        user.setStatus(status);
+        userMapper.updateUserStatus(id, status);
+        result.put("status", "success");
+        result.put("data", user);
         return result;
     }
 
     public LoginTicket findLoginTicket(String ticket) {
         return loginTicketMapper.selectByTicket(ticket);
+    }
+
+    public int deleteUser(int id){
+        return userMapper.deleteUser(id);
     }
 
 }

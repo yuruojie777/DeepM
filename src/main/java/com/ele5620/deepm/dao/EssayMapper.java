@@ -9,9 +9,11 @@ import java.util.List;
 public interface EssayMapper {
     List<Essay> selectBySid(int sid);
     List<Essay> selectByTid(int tid);
-
+    Essay selectByEssayId(int essayid);
     int insertEssay(Essay essay);
 
     int updateGrade(int essayid, float grade);
     int updateComment(int essayid, String comment);
+
+    int deleteEssay(int essayid);
 }

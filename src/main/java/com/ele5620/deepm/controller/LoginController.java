@@ -41,16 +41,18 @@ public class LoginController {
         //if exists, then add to cookie
         if(result.containsKey("ticket")) {
             Cookie cookie = new Cookie("ticket", result.get("ticket").toString());
+            Cookie cookie1 = new Cookie("role", result.get("role").toString());
             cookie.setPath("/deepm");
             cookie.setMaxAge(3600 * 12);
             response.addCookie(cookie);
+            response.addCookie(cookie1);
         }
         return result;
     }
 
     @PostMapping("/register")
-    public Map<String, String> register(@RequestBody Map<String,Object> map) {
-        Map<String, String> result = new HashMap<String, String>();
+    public Map<String, Object> register(@RequestBody Map<String,Object> map) {
+        Map<String, Object> result = new HashMap<String, Object>();
         System.out.println(map);
         if(map.get("email") == null) {
             result.put("status", "email can not be null");
@@ -71,7 +73,8 @@ public class LoginController {
         String email = (String)map.get("email");
         String name = (String)map.get("name");
         String password = (String) map.get("password");
-        int gender = Integer.parseInt((String) map.get("gender"));
+//        int gender = Integer.parseInt((String) map.get("gender"));
+        int gender = (int)map.get("gender");
         User user = new User();
         user.setEmail(email);
         user.setName(name);

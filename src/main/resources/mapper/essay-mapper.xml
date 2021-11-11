@@ -11,6 +11,12 @@
         sid, tid, title, content, grade, level, status, comment , submittime, deadline
     </sql>
 
+    <select id="selectByEssayId" resultType="Essay">
+        select <include refid="selectFields"></include>
+        from essay
+        where essayid = #{essayid}
+    </select>
+
     <select id="selectBySid" resultType="Essay">
         select <include refid="selectFields"></include>
         from essay
@@ -36,4 +42,8 @@
     <update id="updateComment" parameterType="Essay" keyProperty="essayid">
         update essay set comment = #{comment} where essayid = #{essayid}
     </update>
+
+    <delete id="deleteEssay" parameterType="Essay">
+        delete from essay where essayid = #{essayid}
+    </delete>
 </mapper>

@@ -17,6 +17,12 @@
         where email = #{email}
     </select>
 
+    <select id="selectById" resultType="User">
+        select <include refid="selectFields"></include>
+        from appuser
+        where uid = #{id}
+    </select>
+
 
     <insert id="insertUser" parameterType="User" keyProperty="uid">
         insert into appuser (<include refid="insertFields"></include>)
@@ -26,4 +32,21 @@
     <update id="updateUserPassword" parameterType="User" keyProperty="uid">
         update appuser set password = #{password} where uid = #{id}
     </update>
+
+    <update id="updateUserName" parameterType="User" keyProperty="uid">
+        update appuser set password = #{name} where uid = #{id}
+    </update>
+
+
+    <update id="updateUserAvatar" parameterType="User" keyProperty="uid">
+        update appuser set password = #{avatar} where uid = #{id}
+    </update>
+
+    <update id="updateUserStatus" parameterType="User" keyProperty="uid">
+        update appuser set password = #{status} where uid = #{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="User">
+        delete from appuser where uid = #{id}
+    </delete>
 </mapper>
