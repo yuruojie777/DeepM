@@ -12,13 +12,12 @@
 
             <div class="text item">
               <span>Name: </span>
-              <span>{{ name }}</span>
+              <span> {{studentname}} </span>
             </div>
             <div class="text item">
               <span>Email: </span>
-              <span>{{ email }}</span>
+              <span>{{studentemail}}</span>
             </div>
-            <el-button type="primary" @click="gofeedback">feedback</el-button>
           </el-card>
         </el-col>
       </el-row>
@@ -49,23 +48,24 @@
 export default {
   data() {
     return {
-      name: "xx",
-      email: "xx@163.com",
+      studentname:'',
+      studentemail:'',
+
       btns: [
         {
           path: "upcomingEssay",
           title: "Upcoming Assignments",
-          desc: "",
+          desc: "Check your upcoming assignment",
         },
         {
           path: "submissionList",
           title: "Past Submission List",
-          desc: "",
+          desc: "Check your submission list",
         },
         {
-          path: "announcement",
-          title: "Announcement",
-          desc: "",
+          path: "feedback",
+          title: "Feedback",
+          desc: "give your feedback",
         },
       ],
       uid: localStorage.getItem("uid"),
@@ -76,25 +76,24 @@ export default {
       console.log("go back");
       this.$router.go(-1);
     },
-    gofeedback() {
-      this.$router.push("/Feedback");
-    },
-    getInfo() {
-      this.$axios
-        .get(`/user/?id=${this.uid}`)
-        .then((res) => {
+    getinfo(){
+      this.ticket = localStorage.getItem('ticket')
+      console.log(this.ticket)
+      this.$axios.get('/user/id/?ticket='+ this.ticket)
+        .then(res=>{
           console.log(res);
-          this.name = res.data.data.name;
-          this.email = res.data.data.email;
+          this.studentname=res.data.user.name
+          this.studentemail=res.data.user.email
         })
         .catch(function (error) {
           console.log(error);
-        });
+        })
     },
+
   },
-  created() {
-    this.getInfo();
-  },
+  mounted(){
+    this.getinfo()
+  }
 };
 </script>
 

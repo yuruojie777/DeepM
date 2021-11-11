@@ -10,9 +10,8 @@
       <div class="form-wrap">
         <el-input
           type="textarea"
-          :rows="6"
           placeholder="Place Enter"
-          v-model="textarea"
+          v-model="feedback"
           style="margin-top: 20px"
         >
         </el-input>
@@ -34,6 +33,7 @@ export default {
     return {
       score: "",
       textarea: "",
+      feedback:'',
     };
   },
   methods: {
@@ -42,19 +42,17 @@ export default {
       this.$router.go(-1);
     },
     submitFn() {
-      this.$axios
-        .post("/feedback", {
-          fromid: localStorage.getItem('uid'),
-          content: this.textarea,
+      this.id = localStorage.getItem('uid');
+      console.log(this.id);
+      this.$axios.post('/feedback',
+        {
+          content: this.feedback,
+          fromid: this.id,
+
         })
-        .then((response)=> {
+        .then(function (response){
           console.log(response);
-          this.$notify({
-            title: "success",
-            message: "submit successfully",
-            type: "success",
-          });
-          this.textarea = "";
+          window.alert("submit success!")
         })
         .catch(function (error) {
           console.log(error);
