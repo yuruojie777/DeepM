@@ -6,7 +6,9 @@
       content="Student Detail"
     ></el-page-header>
     <div class="studen-detail-top">
-      <div class="article-inner"></div>
+      <div class="article-inner">
+        {{ essay }}
+      </div>
       <div class="result">
         <div class="title">Result</div>
         <div class="result-inner">
@@ -14,23 +16,39 @@
           <div class="items">
             <table>
               <tr>
-                <td>Vocabulary scores</td>
-                <td><span class="num">78.7</span>分</td>
+                <td>Grammer Score</td>
+                <td>
+                  <span class="num">{{ grammerScore }}</span
+                  >分
+                </td>
               </tr>
               <tr>
-                <td>Lexical score</td>
-                <td><span class="num">72.7</span>分</td>
+                <td>Topic Score</td>
+                <td>
+                  <span class="num">{{ topicScore }}</span
+                  >分
+                </td>
               </tr>
               <tr>
-                <td>Logic score</td>
-                <td><span class="num">82.5</span>分</td>
+                <td>Total Score</td>
+                <td>
+                  <span class="num">{{ totalScore }}</span
+                  >分
+                </td>
               </tr>
               <tr>
-                <td>Content score</td>
-                <td><span class="num">67.2</span>分</td>
+                <td>Word Score</td>
+                <td>
+                  <span class="num">{{ wordScore }}</span
+                  >分
+                </td>
               </tr>
             </table>
           </div>
+        </div>
+        <div class="result-comment">
+          <p class="comment-p">comment</p>
+          <div>{{ grammarAdvice }}</div>
         </div>
       </div>
     </div>
@@ -57,7 +75,9 @@
         </el-input>
         <el-row style="margin-top: 20px">
           <el-col :span="2" :push="21">
-            <el-button type="primary" size="default" @click="submitFn">submit</el-button>
+            <el-button type="primary" size="default" @click="submitFn"
+              >submit</el-button
+            >
           </el-col>
         </el-row>
       </div>
@@ -71,6 +91,13 @@ export default {
     return {
       score: "",
       textarea: "",
+      essayid: "",
+      essay: "",
+      grammarAdvice: "",
+      grammerScore: 0,
+      topicScore: 0,
+      totalScore: 0,
+      wordScore: 0,
     };
   },
   methods: {
@@ -84,7 +111,35 @@ export default {
         message: "submit successfully",
         type: "success",
       });
+      this.$axios
+        .put(
+          `/essay/grade/?essayid=${this.essayid}&&grade=${this.score}&&comment=${this.textarea}`
+        )
+        .then((res) => {})
+        .catch(function (error) {
+          console.log(error);
+        });
     },
+    initData() {
+      this.$axios
+        .get("/essay/aimark/?essayid=" + 3)
+        .then((res) => {
+          this.essay = res.data.essay;
+          this.grammarAdvice = res.data.grammarAdvice;
+          this.grammerScore = res.data.grammerScore.toFixed(2);
+          this.topicScore = res.data.topicScore.toFixed(2);
+          this.totalScore = res.data.totalScore.toFixed(2);
+          this.wordScore = res.data.wordScore.toFixed(2);
+          console.log(res.data.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+  },
+  created() {
+    this.essayid = this.$route.query.id;
+    this.initData();
   },
 };
 </script>
@@ -101,6 +156,12 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+}
+
+.studen-detail .studen-detail-top .article-inner {
+  padding: 15px;
+  box-sizing: border-box;
+  text-indent: 2rem;
 }
 
 .studen-detail .studen-detail-top .article-inner,
@@ -148,6 +209,17 @@ export default {
   font-size: 24px;
   font-weight: bold;
   margin: 0 4px;
+}
+
+.studen-detail .studen-detail-top .result .result-comment {
+  height: 150px;
+  overflow: auto;
+}
+
+.studen-detail .studen-detail-top .result .result-comment .comment-p {
+  border-left: 4px solid #295ee9;
+  padding-left: 5px;
+  margin-bottom: 15px;
 }
 
 .studen-detail .studen-detail-bottom {

@@ -47,7 +47,7 @@ export default {
     return {
       size: "",
       tableData: [
-        {
+        /* {
           releaseDate: "2016-05-02",
           endDate: "2016-05-02",
           homework: "homework 1",
@@ -74,35 +74,7 @@ export default {
           homework: "homework 4",
           address: "上海市普陀区金沙江路 1516 弄",
           quantity: 80,
-        },
-        {
-          releaseDate: "2016-05-03",
-          endDate: "2016-05-03",
-          homework: "homework 4",
-          address: "上海市普陀区金沙江路 1516 弄",
-          quantity: 80,
-        },
-        {
-          releaseDate: "2016-05-03",
-          endDate: "2016-05-03",
-          homework: "homework 4",
-          address: "上海市普陀区金沙江路 1516 弄",
-          quantity: 80,
-        },
-        {
-          releaseDate: "2016-05-03",
-          endDate: "2016-05-03",
-          homework: "homework 4",
-          address: "上海市普陀区金沙江路 1516 弄",
-          quantity: 80,
-        },
-        {
-          releaseDate: "2016-05-03",
-          endDate: "2016-05-03",
-          homework: "homework 4",
-          address: "上海市普陀区金沙江路 1516 弄",
-          quantity: 80,
-        },
+        }, */
       ],
       tid: +localStorage.getItem("uid")
     };

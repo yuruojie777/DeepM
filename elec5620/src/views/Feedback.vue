@@ -19,7 +19,7 @@
         <el-row :gutter="20" style="margin-top: 20px">
           <el-col :span="2" :push="21">
             <el-button type="primary" size="default" @click="submitFn"
-            >submit</el-button
+              >submit</el-button
             >
           </el-col>
         </el-row>
@@ -42,11 +42,23 @@ export default {
       this.$router.go(-1);
     },
     submitFn() {
-      this.$notify({
-        title: "success",
-        message: "submit successfully",
-        type: "success",
-      });
+      this.$axios
+        .post("/feedback", {
+          fromid: localStorage.getItem('uid'),
+          content: this.textarea,
+        })
+        .then((response)=> {
+          console.log(response);
+          this.$notify({
+            title: "success",
+            message: "submit successfully",
+            type: "success",
+          });
+          this.textarea = "";
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };

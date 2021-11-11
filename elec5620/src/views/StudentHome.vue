@@ -1,9 +1,6 @@
 <template>
   <div class="student-home">
-    <el-page-header
-      @back="goBack"
-      title="Back"
-    ></el-page-header>
+    <el-page-header @back="goBack" title="Back"></el-page-header>
     <div class="title mt20">Student Home</div>
     <div class="body">
       <el-row>
@@ -15,11 +12,11 @@
 
             <div class="text item">
               <span>Name: </span>
-              <span>Gilbert</span>
+              <span>{{ name }}</span>
             </div>
             <div class="text item">
               <span>Email: </span>
-              <span>xxx@163.com</span>
+              <span>{{ email }}</span>
             </div>
             <el-button type="primary" @click="gofeedback">feedback</el-button>
           </el-card>
@@ -37,7 +34,7 @@
                 style="float: right; padding: 3px 0"
                 type="text"
                 @click="$router.push({ path: item.path })"
-              >More</el-button
+                >More</el-button
               >
             </div>
             <div class="text item">{{ item.desc }}</div>
@@ -52,6 +49,8 @@
 export default {
   data() {
     return {
+      name: "xx",
+      email: "xx@163.com",
       btns: [
         {
           path: "upcomingEssay",
@@ -68,8 +67,8 @@ export default {
           title: "Announcement",
           desc: "",
         },
-
       ],
+      uid: localStorage.getItem("uid"),
     };
   },
   methods: {
@@ -77,9 +76,24 @@ export default {
       console.log("go back");
       this.$router.go(-1);
     },
-    gofeedback(){
-      this.$router.push('/Feedback')
+    gofeedback() {
+      this.$router.push("/Feedback");
     },
+    getInfo() {
+      this.$axios
+        .get(`/user/?id=${this.uid}`)
+        .then((res) => {
+          console.log(res);
+          this.name = res.data.data.name;
+          this.email = res.data.data.email;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+  },
+  created() {
+    this.getInfo();
   },
 };
 </script>
@@ -96,7 +110,6 @@ export default {
   padding-left: 30px;
 }
 
-
 .clearfix:before,
 .clearfix:after {
   display: table;
@@ -106,7 +119,6 @@ export default {
 .clearfix:after {
   clear: both;
 }
-
 
 .text {
   font-size: 14px;
@@ -128,7 +140,6 @@ export default {
 .box-card {
   width: 400px;
 }
-
 
 .el-row + .el-row {
   margin-top: 30px;

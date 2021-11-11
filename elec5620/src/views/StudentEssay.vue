@@ -60,7 +60,7 @@ export default {
     return {
       search: "",
       tableData: [
-        {
+        /* {
           date: "2016-05-02",
           name: "王小虎",
           address: "上海市普陀区金沙江路 1518 弄",
@@ -83,7 +83,7 @@ export default {
           name: "王小虎",
           address: "上海市普陀区金沙江路 1516 弄",
           score: 80,
-        },
+        }, */
       ],
       tid: +localStorage.getItem("uid")
     };
@@ -93,9 +93,12 @@ export default {
       console.log("go back");
       this.$router.go(-1);
     },
-    toDetail() {
+    toDetail(i, row) {
       this.$router.push({
         path: "studentDetail",
+        query:{
+          id: row.essayId
+        }
       });
     },
     initTableData() {

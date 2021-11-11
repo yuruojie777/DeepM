@@ -76,7 +76,7 @@ export default {
           releasetime: this.date[0],
           endtime: this.date[1],
         })
-        .then(function (response) {
+        .then((response)=> {
           console.log(response);
           this.$notify({
             title: "success",
