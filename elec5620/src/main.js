@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 var axios = require('axios')
 Vue.prototype.$axios = axios
-axios.defaults.baseURL = 'https://bed4-119-28-62-29.ngrok.io/deepm'
+axios.defaults.baseURL = 'https://7433-119-28-62-29.ngrok.io/deepm'
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

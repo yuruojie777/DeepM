@@ -1,14 +1,18 @@
 <template>
-  <div class="logincon">
+  <div class="trueson">
+    <div class="logo">
+
+    </div>
+  <div class="login-container">
     Login
-    <el-form :model="loginForm" :rules="loginRules" ref="loginFormRef" label-width="100px" class="loginForm">
+    <el-form :model="loginForm" :rules="loginRules" ref="loginFormRef" label-width="100px" class="loginForm"  @keyup.enter.native="login">
   <!--      email-->
         <el-form-item label="Email" prop="email">
           <el-input v-model="loginForm.email"></el-input>
         </el-form-item>
   <!--      password-->
-        <el-form-item label="Password" prop="password">
-          <el-input v-model="loginForm.password" type="password"></el-input>
+        <el-form-item label="Password" prop="password" >
+          <el-input v-model="loginForm.password" type="password" show-password></el-input>
         </el-form-item>
   <!--      button-->
         <el-form-item>
@@ -21,6 +25,7 @@
         </el-form-item>
 
     </el-form>
+  </div>
   </div>
 </template>
 
@@ -64,6 +69,7 @@ export default {
             console.log(res.data.role);
             localStorage.setItem('role', res.data.role);
             localStorage.setItem('ticket', res.data.ticket);
+            localStorage.setItem('uid',res.data.id);
             if(res.data.role == 0) this.$router.push({path:'/studentHome'});
             if(res.data.role == 1) this.$router.push({path:'/teacherHome'});
             if(res.data.role == 2) this.$router.push({path:'/admin'});
@@ -87,7 +93,12 @@ export default {
 </script>
 
 <style scoped>
-.logincon {
+.trueson {
+
+}
+
+
+.login-container {
   -webkit-border-radius: 5px;
   border-radius: 5px;
   margin: 180px auto;
