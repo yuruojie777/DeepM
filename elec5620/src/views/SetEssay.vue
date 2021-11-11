@@ -11,7 +11,7 @@
         <el-row :gutter="20">
           <el-col :span="12" :offset="0">
             <el-input
-              v-model="score"
+              v-model="title"
               placeholder="Place Enter Title"
               size="normal"
               clearable
@@ -20,14 +20,14 @@
             </el-input>
           </el-col>
         </el-row>
-        <el-row style="margin-top:20px">
+        <el-row style="margin-top: 20px">
           <el-col :span="12" :offset="0">
             <el-date-picker
               v-model="date"
               type="daterange"
               range-separator="to"
-              start-placeholder="Start date"
-              end-placeholder="End date"
+              start-placeholder="Release time"
+              end-placeholder="End time"
               value-format="yyyy-MM-dd"
             >
             </el-date-picker>
@@ -57,9 +57,9 @@
 export default {
   data() {
     return {
-      score: "",
+      title: "",
       textarea: "",
-      date: ""
+      date: "",
     };
   },
   methods: {
@@ -68,11 +68,25 @@ export default {
       this.$router.go(-1);
     },
     submitFn() {
-      this.$notify({
-        title: "success",
-        message: "submit successfully",
-        type: "success",
-      });
+      this.$axios
+        .post("/task", {
+          teacherid: +localStorage.getItem('uid'),
+          title: this.title,
+          content: this.textarea,
+          releasetime: this.date[0],
+          endtime: this.date[1],
+        })
+        .then(function (response) {
+          console.log(response);
+          this.$notify({
+            title: "success",
+            message: "submit successfully",
+            type: "success",
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };

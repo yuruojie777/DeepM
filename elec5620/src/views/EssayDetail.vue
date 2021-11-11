@@ -10,20 +10,22 @@
       <el-row>
         <el-col :span="24">
           <el-table :data="tableData" style="width: 100%">
-            <el-table-column label="Homework" prop="homework"> </el-table-column>
-            <el-table-column label="Release Date" prop="releaseDate"> </el-table-column>
-            <el-table-column label="End Date" prop="endDate"> </el-table-column>
-            <el-table-column label="Quantity submitted" prop="quantity">
+            <el-table-column label="Homework" prop="title">
+            </el-table-column>
+            <el-table-column label="Release Date" prop="releasetime">
+            </el-table-column>
+            <el-table-column label="End Date" prop="endtime"> </el-table-column>
+            <!-- <el-table-column label="Quantity submitted" prop="quantity">
               <template slot-scope="scope">
                 <el-tag size="medium">{{ scope.row.quantity }}</el-tag>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column>
               <template slot-scope="scope">
                 <el-button
                   type="text"
                   @click="toDetail(scope.$index, scope.row)"
-                >view</el-button
+                  >view</el-button
                 >
               </template>
             </el-table-column>
@@ -102,6 +104,7 @@ export default {
           quantity: 80,
         },
       ],
+      tid: +localStorage.getItem("uid")
     };
   },
   methods: {
@@ -114,6 +117,20 @@ export default {
         path: "studentEssay",
       });
     },
+    initTableData() {
+      this.$axios
+        .get("/task/?teacherid=" + this.tid)
+        .then((res) => {
+          this.tableData = res.data.data;
+          console.log(res.data.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+  },
+  created() {
+    this.initTableData();
   },
 };
 </script>

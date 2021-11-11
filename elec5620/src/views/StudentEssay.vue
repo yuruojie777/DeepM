@@ -24,17 +24,21 @@
           <el-table :data="tableData" style="width: 100%">
             <el-table-column label="Student name">
               <template slot-scope="scope">
-                <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                <el-tag size="medium">{{ scope.row.sid }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="Date" prop="date"> </el-table-column>
-            <el-table-column label="Score" prop="score"> </el-table-column>
+            <el-table-column label="Date" prop="submitTime"></el-table-column>
+            <el-table-column label="Score">
+              <template slot-scope="scope">
+                {{scope.row.grade == -1 ? "not graded" : scope.row.grade }}
+              </template>
+            </el-table-column>
             <el-table-column>
               <template slot-scope="scope">
                 <el-button
                   type="text"
                   @click="toDetail(scope.$index, scope.row)"
-                >view</el-button
+                  >view</el-button
                 >
               </template>
             </el-table-column>
@@ -81,6 +85,7 @@ export default {
           score: 80,
         },
       ],
+      tid: +localStorage.getItem("uid")
     };
   },
   methods: {
@@ -93,7 +98,21 @@ export default {
         path: "studentDetail",
       });
     },
+    initTableData() {
+      this.$axios
+        .get("/essay/teacher/?tid=" + this.tid)
+        .then((res) => {
+          this.tableData = res.data.data;
+          console.log(res.data.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
   },
+  created(){
+    this.initTableData();
+  }
 };
 </script>
 
