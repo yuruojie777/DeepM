@@ -42,10 +42,12 @@ public class LoginController {
         if(result.containsKey("ticket")) {
             Cookie cookie = new Cookie("ticket", result.get("ticket").toString());
             Cookie cookie1 = new Cookie("role", result.get("role").toString());
+            Cookie cookie2 = new Cookie("id", result.get("id").toString());
             cookie.setPath("/deepm");
             cookie.setMaxAge(3600 * 12);
             response.addCookie(cookie);
             response.addCookie(cookie1);
+            response.addCookie(cookie2);
         }
         return result;
     }
@@ -74,12 +76,14 @@ public class LoginController {
         String name = (String)map.get("name");
         String password = (String) map.get("password");
 //        int gender = Integer.parseInt((String) map.get("gender"));
-        int gender = (int)map.get("gender");
+        int gender = map.get("gender").equals("male")?1:0;
+        int role = (int)map.get("role");
         User user = new User();
         user.setEmail(email);
         user.setName(name);
         user.setPassword(password);
         user.setGender(gender);
+        user.setRole(role);
         result = userService.register(user);
 
         return result;

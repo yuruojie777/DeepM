@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ele5620.deepm.dao.TaskMapper">
+    <sql id="selectFields">
+        tid, teacherid, title, content, releasetime
+    </sql>
+    <sql id="insertFields">
+        teacherid, title, content, releasetime
+    </sql>
+
+    <select id="selectByTaskId" resultType="Task">
+        select <include refid="selectFields"></include>
+        from task
+        where tid = #{tid}
+    </select>
+
+    <select id="selectByTeacherId" resultType="Task">
+        select <include refid="selectFields"></include>
+        from task
+        where teacherid = #{teacherid}
+    </select>
+
+    <select id="selectByTitle" resultType="Task">
+        select <include refid="selectFields"></include>
+        from task
+        where title like #{title}
+    </select>
+
+
+    <insert id="insertTask" parameterType="Task" keyProperty="tid">
+        insert into task (<include refid="insertFields"></include>)
+        values(#{teacherid}, #{title}, #{content}, #{releasetime})
+    </insert>
+
+
+    <delete id="deleteTask" parameterType="Task">
+        delete from task where tid = #{tid}
+    </delete>
+</mapper>

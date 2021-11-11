@@ -24,6 +24,10 @@ public class EssayService {
         return TextcorrectwritingV3Demo.requestForAIMarking(essay.getContent());
     }
 
+
+    public Essay findEssayByEssayid(int essayid){
+        return essayMapper.selectByEssayId(essayid);
+    }
     public Map<String, Object> findEssayBySid(int sid){
         List<Essay> essayList =  essayMapper.selectBySid(sid);
         Map<String, Object> map = new HashMap<String, Object>();
@@ -40,7 +44,32 @@ public class EssayService {
         return map;
     }
 
-    public Map<String, Object> addEssay(Essay essay){
+
+    public Map<String, Object> findEssayByTitle(String title) {
+        List<Essay> essayList = essayMapper.selectByTitle("%" + title + "%");
+        Map<String, Object> map = new HashMap<>();
+        map.put("data", essayList);
+        map.put("status", "success");
+        return map;
+    }
+    public Map<String, Object> addEssay( Map<String, Object> form){
+
+        Essay essay = new Essay();
+        String title = (String)form.get("title");
+        String content = (String)form.get("content");
+        System.out.println(title);
+        System.out.println(content);
+        int sid = (int)form.get("sid");
+        essay.setTitle(title);
+        essay.setContent(content);
+        essay.setSubmitTime(new Timestamp(System.currentTimeMillis()));
+        essay.setGrade(-1);
+        essay.setSid(sid);
+        essay.setStatus(0);
+        essay.setLevel(0);
+        essay.setComment("No comment yet");
+        essay.setDeadline(new Timestamp(System.currentTimeMillis() + 3600*12));
+
         essayMapper.insertEssay(essay);
         Map<String, Object> map = new HashMap<>();
         map.put("status", "success");

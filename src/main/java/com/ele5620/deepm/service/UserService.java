@@ -75,11 +75,12 @@ public class UserService {
 
         result.put("status", "success");
         result.put("role", appuser.getRole());
+        result.put("id", appuser.getUid());
         System.out.println(result);
 
         //add loginTicket to table
         LoginTicket loginTicket = new LoginTicket();
-        loginTicket.setUid(user.getUid());
+        loginTicket.setUid(appuser.getUid());
         loginTicket.setTicket(CommonUtil.generateUUID());
         loginTicket.setStatus(0);
         loginTicket.setExpired(new Date(System.currentTimeMillis() + 3600 * 12 * 1000));

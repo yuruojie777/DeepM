@@ -5,6 +5,7 @@ import com.ele5620.deepm.service.EssayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,17 +28,36 @@ public class EssayController {
         return essayService.findEssayByTid(tid);
     }
 
-    @PostMapping
-    public Map<String, Object> addEssay(Map<String, Object> form){
-        Map<String, Object> map = new HashMap<>();
-        Essay essay = new Essay();
-        essay.setTitle((String)form.get("title"));
-        essay.setSubmitTime(new Timestamp(System.currentTimeMillis()));
+    @GetMapping
+    public Map<String, Object> searchByKeyWord(@RequestParam String search) {
+        return essayService.findEssayByTitle(search);
+    }
 
-        map.put("data", essay);
+    @PostMapping
+    public Map<String, Object> addEssay(@RequestBody Map<String, Object> form){
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("data", essayService.addEssay(form));
         return map;
     }
 
+    @GetMapping("/aimark")
+    public Map<String, Object> aiMark(int essayid) {
+        Map<String, Object> map = new HashMap<>();
+        Essay essay = essayService.findEssayByEssayid(essayid);
+        if(essay == null) {
+            map.put("status", "No essay was found");
+            return map;
+        }
+        try {
+            return essayService.post(essay);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        map.put("status", "error");
+        return map;
+    }
     @DeleteMapping
     public Map<String, Object> deleteEssay(@RequestBody int essayid) {
         return essayService.deleteEssay(essayid);
