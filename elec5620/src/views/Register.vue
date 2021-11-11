@@ -39,7 +39,7 @@ export default {
         name: '',
         code:'',
         email:'',
-        gender:0,
+        gender:'',
         password1:'',
         password2:'',
       },
@@ -84,12 +84,13 @@ export default {
           email: this.ruleForm.email,
           password: this.ruleForm.password1,
           name: this.ruleForm.name,
-          gender: this.gender,
+          gender: this.ruleForm.gender,
           role: 0
         })
           .then(function (response) {
             console.log(response);
-            this.$router.push('/login');
+            var that = this;
+            that.$router.push('/login');
           })
           .catch(function (error) {
             console.log(error);

@@ -269,7 +269,7 @@ export default {
           email: this.ruleForm.email,
           password: this.ruleForm.password1,
           name: this.ruleForm.name,
-          gender: this.gender,
+          gender: this.ruleForm.gender,
           role: 1
         })
           .then(function (response) {
