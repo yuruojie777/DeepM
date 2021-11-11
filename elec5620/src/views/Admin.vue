@@ -50,10 +50,10 @@
         <el-input
           v-model="state"
           placeholder="Search the essay title"
-          @blur="askcourse"
+          @keyup.enter.native="askcourse"
           style="width: 800px"
         ></el-input>
-        <el-button icon="el-icon-search" size="small" @click="askcourse"></el-button>
+        <el-button icon="el-icon-search" type="primary" size="small" @click="askcourse"></el-button>
       </el-header>
       <!--display essays-->
       <el-main>
