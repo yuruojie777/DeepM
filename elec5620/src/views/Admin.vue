@@ -119,20 +119,7 @@
     </el-tab-pane>
 
     <el-tab-pane label="5.Manage User account" name="fifth">
-      <div style="display: flex">
-        <el-input
-          v-model="searchUser"
-          placeholder="Username"
-          style="width: 500px"
-        >
-        </el-input>
-        <el-button
-          class="el-icon-search"
-          size="small"
-          @click="getAllUser(1)"
-        ></el-button>
-      </div>
-
+      
       <el-table
         :data="userData"
         style="width: 100%; margin-bottom: 20px"

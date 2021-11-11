@@ -106,19 +106,19 @@ router.beforeEach((to, from, next) => {
   var role = localStorage.getItem('role')
   if (to.meta.requireAuth) {
     if (role == 2) {
-      if (to.path !== "/admin") {
+      if (to.path !== "/admin" && to.path !== "/studenthome") {
         alert("You cannot go these page!")
       } else {
         next()
       }
     } else if (role == 1) {
-      if (to.path === "/admin") {
+      if (to.path === "/admin" && to.path !== "/studenthome") {
         alert("You cannot go these page!")
       } else {
         next()
       }
     } else if (role == 0) {
-      if (to.path === "/admin") {
+      if (to.path === "/admin" && to.path !== "/teacherhome") {
         alert("You cannot go these page!")
       } else {
         next()
