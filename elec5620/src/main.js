@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 var axios = require('axios')
 Vue.prototype.$axios = axios
-axios.defaults.baseURL = 'localhost:8080/deepm'
+axios.defaults.baseURL = 'http://localhost:8080/deepm'
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
