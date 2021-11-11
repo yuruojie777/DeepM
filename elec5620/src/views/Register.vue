@@ -5,12 +5,12 @@
       <el-form-item label="Email" prop="email">
         <el-input v-model="ruleForm.email"></el-input>
       </el-form-item>
-      <el-form-item label="Veification Code">
-        <el-button type="success">send</el-button>
-      </el-form-item>
-      <el-form-item label="Code" prop="code">
-        <el-input v-model="ruleForm.code"></el-input>
-      </el-form-item>
+<!--      <el-form-item label="Veification Code">-->
+<!--        <el-button type="success">send</el-button>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="Code" prop="code">-->
+<!--        <el-input v-model="ruleForm.code"></el-input>-->
+<!--      </el-form-item>-->
       <el-form-item label="Name" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
@@ -20,12 +20,12 @@
       <el-form-item label="Confirm password" prop="password2">
         <el-input v-model="ruleForm.password2"></el-input>
       </el-form-item>
-      <el-form-item label="Gender" prop="gender">
-        <el-radio v-model="ruleForm.gender" label="male">male</el-radio>
+      <el-form-item label="Role" prop="role">
+        <el-radio v-model="ruleForm.gender" label="male" >male</el-radio>
         <el-radio v-model="ruleForm.gender" label="female">female</el-radio>
       </el-form-item>
       <el-button style="width:100px" @click="gologin" type="primary">Login</el-button>
-      <el-button style="width:100px" @click="submit"  type="primary">Submit</el-button>
+      <el-button style="width:100px" @click="register"  type="primary">Submit</el-button>
     </el-form>
   </div>
 </template>
@@ -39,7 +39,7 @@ export default {
         name: '',
         code:'',
         email:'',
-        gender:'',
+        gender:0,
         password1:'',
         password2:'',
       },
@@ -56,15 +56,17 @@ export default {
           {required: true, message: 'please input your email', trigger: 'blur'},
           {
             type: 'email',
-            message: 'Please input the right email adress',
+            message: 'Please input the right email address',
             trigger: ['blur', 'change'],
           },
         ],
         password1:[
-          {required: true, message: 'please input your email', trigger: 'blur'}
+          {required: true, message: 'please input your email', trigger: 'blur'},
+          {min:6, max:20, message:'length should be between 6 to 20', trigger:'blur'}
         ],
         password2:[
-          {required: true, message: 'please input your email', trigger: 'blur'}
+          {required: true, message: 'please input your email', trigger: 'blur'},
+          {min:6, max:20, message:'length should be between 6 to 20', trigger:'blur'}
         ],
         gender:[
           {required: true, message: 'please input your email', trigger: 'blur'}
@@ -74,23 +76,29 @@ export default {
     }
   },
 
-  methods:{
-    gologin(){
-      this.$router.push('/login')
-    },
-    submit(){
-      this.$refs.ruleForm.validate((valid)=> {
-        if(valid) {
-          if(this.ruleForm.password1==this.ruleForm.password2) {
-            this.$alert('You have successfully  registered.', 'Welcome', {
-              confirmButtonText: 'Confirm',
-            });
-            this.$router.push('/login')
-          }
-          else{this.$alert('Two password does not match！')}
-        }
+  methods: {
+    register(){
+      this.$refs.ruleForm.validate(async valid =>{
+        if( !valid) return;
+        this.$axios.post('/register', {
+          email: this.ruleForm.email,
+          password: this.ruleForm.password1,
+          name: this.ruleForm.name,
+          gender: this.gender,
+          role: 0
+        })
+          .then(function (response) {
+            console.log(response);
+            this.$router.push('/login');
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       })
     },
+    gologin() {
+      this.$router.push('/login');
+    }
   }
 }
 </script>

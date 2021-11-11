@@ -40,7 +40,7 @@
           <el-radio v-model="ruleForm.gender" label="male">male</el-radio>
           <el-radio v-model="ruleForm.gender" label="female">female</el-radio>
         </el-form-item>
-        <el-button style="width:100px"type="primary">Submit</el-button>
+        <el-button @click="generate" style="width:100px"type="primary">Submit</el-button>
       </el-form></div>
     </el-tab-pane>
 
@@ -261,7 +261,26 @@ export default {
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
-    }
+    },
+    generate(){
+      this.$refs.ruleForm.validate(async valid =>{
+        if( !valid) return;
+        this.$axios.post('/register', {
+          email: this.ruleForm.email,
+          password: this.ruleForm.password1,
+          name: this.ruleForm.name,
+          gender: this.gender,
+          role: 1
+        })
+          .then(function (response) {
+            console.log(response);
+            window.alert("submit success!")
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      })
+    },
   }
 }
 </script>

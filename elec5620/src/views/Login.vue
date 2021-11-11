@@ -1,21 +1,24 @@
 <template>
   <div class="logincon">
     Login
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="Email" prop="email">
-        <el-input v-model="ruleForm.email"></el-input>
-      </el-form-item>
-      <el-form-item label="Password" prop="password">
-        <el-input v-model="ruleForm.password"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="goregister">
-          Sign in
-        </el-button>
-        <el-button type="primary" @click="gologin">
-          Log in
-        </el-button>
-      </el-form-item>
+    <el-form :model="loginForm" :rules="loginRules" ref="loginFormRef" label-width="100px" class="loginForm">
+  <!--      email-->
+        <el-form-item label="Email" prop="email">
+          <el-input v-model="loginForm.email"></el-input>
+        </el-form-item>
+  <!--      password-->
+        <el-form-item label="Password" prop="password">
+          <el-input v-model="loginForm.password" type="password"></el-input>
+        </el-form-item>
+  <!--      button-->
+        <el-form-item>
+            <el-button type="primary" @click="register">
+              Sign in
+            </el-button>
+            <el-button type="primary" @click="login">
+              Log in
+            </el-button>
+        </el-form-item>
 
     </el-form>
   </div>
@@ -23,54 +26,61 @@
 
 <script>
 export default {
-  name: "Login",
-  methods:{
-    goregister(){
-      this.$router.push('/register')
+  data() {
+    return {
+      //data object
+      loginForm:{
+        email:"123@qq.com",
+        password:"123456"
       },
-      gologin(){
-      this.$refs.ruleForm.validate((valid)=>{
-      if(valid){
-      if(this.ruleForm.email === '4399@qq.com'&& this.ruleForm.password=== '4399')
-        {
-          this.$alert('You have successfully logged in.', 'Welcome', {
-            confirmButtonText: 'Confirm',
-          });
-          // callback: action => {
-          //        this.$message({
-          //          type: 'info',
-          //          message: `action: ${ action }`
-          //        });
-          //      }
-          this.$router.push('/admin')
-        }
-      else {
-       this.$alert('wrong password or email!')
-      }
-      }
-      }
-      )
-      }
-  },
-  data(){
-    return{
-      ruleForm: {
-        email: '',
-        password:'',
-      },
-      rules: {
-       email: [
-          {required: true, message: 'Please input your name', trigger: 'blur'},
-         {
-           type: 'email',
-           message: 'Please input the right email adress',
-           trigger: ['blur', 'change'],
-         },
+      //rules
+      loginRules:{
+        //username verify
+        email:[
+          {required:true, message:'Please input your email', trigger:'blur'},
+          {min:1, max:20, message:'length should be within 20', trigger:'blur'}
         ],
+        //password verify
         password:[
-          {required: true, message: 'Please input your password', trigger: 'blur'}
-        ],
+          {required:true, message:'Please input your password', trigger:'blur'},
+          {min:6, max:20, message:'length should be between 6 to 20', trigger:'blur'}
+        ]
       }
+    }
+  },
+  methods: {
+    login(){
+      console.log(this.loginForm.email);
+      console.log(this.loginForm.password);
+      var result;
+      this.$refs.loginFormRef.validate(async valid =>{
+        if( !valid) return;
+        this.$axios.post('/login', {
+          email: this.loginForm.email,
+          password: this.loginForm.password,
+        }).then(res => {
+          console.log(res.status)
+          if(res.data.status == "success") {
+            console.log(res.data.role);
+            localStorage.setItem('role', res.data.role);
+            localStorage.setItem('ticket', res.data.ticket);
+            if(res.data.role == 0) this.$router.push({path:'/studentHome'});
+            if(res.data.role == 1) this.$router.push({path:'/teacherHome'});
+            if(res.data.role == 2) this.$router.push({path:'/admin'});
+          }else {
+            this.$notify({
+              title : 'message',
+              message : res.data.status,
+              type : 'error'
+            });
+          }
+          }).catch(err => {
+            console.log(err)
+        })
+      })
+    },
+    register() {
+      this.$router.push('/register');
     }
   }
 }
