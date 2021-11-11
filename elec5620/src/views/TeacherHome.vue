@@ -8,43 +8,6 @@
     <div class="title mt20">Teacher Home</div>
     <div class="teacher-home-body">
       <el-row>
-        <!-- <el-col :span="8">
-        <el-descriptions title="UserInfo">
-          <el-descriptions-item label="Name">好吃的汉堡</el-descriptions-item>
-          <el-descriptions-item label="Email"
-            >xxx@163.com</el-descriptions-item
-          >
-          <el-descriptions-item label="Remark">
-            <el-tag size="small">Teacher</el-tag>
-          </el-descriptions-item>
-        </el-descriptions>
-        <el-descriptions direction="vertical" :colon="false">
-          <el-descriptions-item
-            ><el-button
-              type="primary"
-              plain
-              @click="$router.push({ path: 'essayDetail' })"
-              >历史发布</el-button
-            ></el-descriptions-item
-          >
-          <el-descriptions-item
-            ><el-button
-              type="info"
-              plain
-              @click="$router.push({ path: 'setEssay' })"
-              >发布题目</el-button
-            ></el-descriptions-item
-          >
-          <el-descriptions-item>
-            <el-button
-              type="warning"
-              plain
-              @click="$router.push({ path: 'feedback' })"
-              >反馈</el-button
-            >
-          </el-descriptions-item>
-        </el-descriptions>
-      </el-col> -->
         <el-col :span="8">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
@@ -52,11 +15,11 @@
             </div>
             <div class="text item">
               <span>Name: </span>
-              <span>好吃的汉堡</span>
+              <span>{{teachername}} </span>
             </div>
             <div class="text item">
               <span>Email: </span>
-              <span>xxx@163.com</span>
+              <span>{{teacheremail}} </span>
             </div>
           </el-card>
         </el-col>
@@ -88,6 +51,8 @@
 export default {
   data() {
     return {
+      teachername:'',
+      teacheremail:'',
       currentDate: new Date(),
       btns: [
         {
@@ -113,7 +78,23 @@ export default {
       console.log("go back");
       this.$router.go(-1);
     },
+    getinfo(){
+      this.ticket = localStorage.getItem('ticket')
+      console.log(this.ticket)
+      this.$axios.get('/user/id/?ticket='+ this.ticket)
+        .then(res=>{
+          console.log(res);
+          this.teachername=res.data.user.name
+          this.teacheremail=res.data.user.email
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    },
   },
+  mounted(){
+    this.getinfo()
+  }
 };
 </script>
 
