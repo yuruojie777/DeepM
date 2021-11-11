@@ -155,7 +155,7 @@ console.log(this.role);
   },
   mounted() {
     this.getrole()
-
+this.initData()
   }
 };
 </script>
