@@ -25,7 +25,7 @@
             <el-date-picker
               v-model="date"
               type="daterange"
-              range-separator="至"
+              range-separator="to"
               start-placeholder="Start date"
               end-placeholder="End date"
               value-format="yyyy-MM-dd"
