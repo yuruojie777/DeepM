@@ -4,20 +4,32 @@
       @back="goBack"
       title="Back"
     ></el-page-header>
-    <div class="title mt20">Past Submission List</div>
-    <div class="mt20">
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column label="Homework" prop="homework"> </el-table-column>
-        <el-table-column label="Submit time" prop="submitTime"> </el-table-column>
-        <el-table-column label="Grade" prop="grade"> </el-table-column>
-        <el-table-column>
-          <template slot-scope="scope">
-            <el-button type="text" @click="toDetail(scope.$index, scope.row)">
-              view
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+    <div class="title mt20">Submit Essay</div>
+    <div class="form-wrap">
+      <el-row :gutter="20">
+        <el-col :span="12" :offset="0">
+          <el-input
+            v-model="title"
+            placeholder="Place Enter Title"
+            size="normal"
+            clearable
+          >
+            <template slot="prepend">Title</template>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-input
+        type="textarea"
+        placeholder="Place Enter"
+        v-model="content"
+        style="margin-top: 20px"
+      >
+      </el-input>
+      <el-row :gutter="20" style="margin-top: 20px">
+        <el-col :span="2" :push="21">
+          <el-button type="primary" size="default" @click="submitFn">submit</el-button>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -26,19 +38,9 @@
 export default {
   data() {
     return {
-      size: "",
-      tableData: [
-        {
-          submitTime: "2016-05-02",
-          grade: "22",
-          homework: "homework 1",
-        },
-        {
-          submitTime: "2016-05-02",
-          grade: "22",
-          homework: "homework 2",
-        },
-      ],
+      title:"",
+      content:"",
+
     };
   },
   methods: {
@@ -46,11 +48,26 @@ export default {
       console.log("go back");
       this.$router.go(-1);
     },
-    toDetail() {
-      this.$router.push({
-        path: "studentDetail",
-      });
+    submitFn() {
+      this.id = localStorage.getItem('uid');
+      console.log(this.id);
+      this.$axios.post('/essay',
+      {
+        title: this.title,
+        content: this.content,
+        sid: this.id,
+
+        })
+      .then(function (response){
+        console.log(response);
+        window.alert("submit success!")
+      })
+        .catch(function (error) {
+          console.log(error);
+        });
+
     },
+
   },
 };
 </script>

@@ -34,16 +34,17 @@
         </div>
       </div>
     </div>
-    <div class="studen-detail-bottom">
+    <div class="studen-detail-bottom" >
       <div class="title">score</div>
       <div class="form-wrap">
-        <el-row :gutter="20">
+        <el-row :gutter="20" >
           <el-col :span="12" :offset="0">
             <el-input
               v-model="score"
               placeholder="Place Enter Score"
               size="normal"
               clearable
+              :disabled="this.role == 0?true:false"
             ></el-input>
           </el-col>
         </el-row>
@@ -53,11 +54,12 @@
           placeholder="Place Enter"
           v-model="textarea"
           style="margin-top: 20px"
+          :disabled="this.role == 0?true:false"
         >
         </el-input>
         <el-row style="margin-top: 20px">
           <el-col :span="2" :push="21">
-            <el-button type="primary" size="default" @click="submitFn">submit</el-button>
+            <el-button type="primary" size="default" @click="submitFn" plain :disabled="this.role == 0?true:false">submit</el-button>
           </el-col>
         </el-row>
       </div>
@@ -69,6 +71,8 @@
 export default {
   data() {
     return {
+      id:'',
+      role:'',
       score: "",
       textarea: "",
     };
@@ -85,7 +89,25 @@ export default {
         type: "success",
       });
     },
+    getrole(){
+      this.id = localStorage.getItem('uid');
+      console.log(this.id);
+      this.$axios.get('/user/?id='+this.id)
+        .then(res=>{
+          this.role = res.data.data.role;
+console.log(this.role);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+
+    },
+
   },
+  mounted() {
+    this.getrole()
+
+  }
 };
 </script>
 

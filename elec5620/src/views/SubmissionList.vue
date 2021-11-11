@@ -6,10 +6,10 @@
     ></el-page-header>
     <div class="title mt20">Past Submission List</div>
     <div class="mt20">
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column label="Homework" prop="homework"> </el-table-column>
+      <el-table :data="essayData" style="width: 100%">
+        <el-table-column label="Homework" prop="homework"><template slot-scope="scope"><span>{{scope.row.title}}</span></template></el-table-column>
         <el-table-column label="Submit time" prop="submitTime"> </el-table-column>
-        <el-table-column label="Grade" prop="grade"> </el-table-column>
+        <el-table-column label="Grade" prop="grade"><template slot-scope="scope"><span>{{scope.row.grade=-1?'not yet released':scope.row.grade}}</span></template></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
             <el-button type="text" @click="toDetail(scope.$index, scope.row)">
@@ -26,17 +26,12 @@
 export default {
   data() {
     return {
-      size: "",
-      tableData: [
+      essayData: [
         {
-          submitTime: "2016-05-02",
-          grade: "22",
-          homework: "homework 1",
-        },
-        {
-          submitTime: "2016-05-02",
-          grade: "22",
-          homework: "homework 2",
+          releaseDate: "2016-05-03",
+          endDate: "2016-05-03",
+          homework: "homework 4",
+          content: "please write a 500-word essay",
         },
       ],
     };
@@ -51,7 +46,20 @@ export default {
         path: "studentDetail",
       });
     },
+    getessay(){
+      this.$axios.get('/essay/all')
+        .then(res=>{
+          this.essayData = res.data.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    },
+
   },
+  mounted(){
+    this.getessay()
+  }
 };
 </script>
 

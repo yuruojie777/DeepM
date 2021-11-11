@@ -3,11 +3,11 @@
     <el-page-header @back="goBack" title="Back"></el-page-header>
     <div class="title mt20">Essay Detail</div>
     <div class="mt20">
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column width="120px" label="Homework" prop="homework"> </el-table-column>
-        <el-table-column width="400px" label="Content" prop="content"></el-table-column>
-        <el-table-column label="Release Date" prop="releaseDate"> </el-table-column>
-        <el-table-column label="End Date" prop="endDate"> </el-table-column>
+      <el-table :data="essayData" style="width: 100%">
+        <el-table-column width="120px" label="Homework"><template slot-scope="scope"><span>{{scope.row.title}}</span></template></el-table-column>
+        <el-table-column width="400px" label="Content"><template slot-scope="scope"><span>{{scope.row.content}}</span></template></el-table-column>
+        <el-table-column label="Release Date" prop="releaseDate"><template slot-scope="scope"><span>{{scope.row.releasetime}}</span></template></el-table-column>
+        <el-table-column  label="End Date" prop="endDate" ><template slot-scope="scope"><span>{{scope.row.endtime}}</span></template></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
             <el-button type="text" @click="toSubmit(scope.$index, scope.row)">submit</el-button>
@@ -22,8 +22,9 @@
 export default {
   data() {
     return {
-      size: "",
-      tableData: [
+      id:'',
+      ticket:'',
+      essayData: [
         {
           releaseDate: "2016-05-03",
           endDate: "2016-05-03",
@@ -43,8 +44,24 @@ export default {
         path: "submitEssay",
       });
     },
+    getessay(){
+    this.id = localStorage.getItem('uid');
+      console.log(this.id);
+      this.$axios.get('/task/student/?sid='+this.id+'&&status=0')
+        .then(res=>{
+          this.essayData = res.data.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    },
   },
-};
+
+  mounted(){
+
+    this.getessay()
+  }
+}
 </script>
 
 <style>
