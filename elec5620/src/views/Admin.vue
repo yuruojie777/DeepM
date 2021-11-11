@@ -67,19 +67,19 @@
           <el-col
             :span="5"
             v-for="item in feedback"
-            :key="item.id"
+            :key="item.fid"
             :offset="1"
             style="margin-top: 30px"
           >
             <div>
               <el-card :body-style="{ padding: '0px' }">
                 <div slot="header" class="clearfix">
-                  <span>{{ item.title }}</span>
+                  <span>{{item.fid}}</span>
                 </div>
                 <el-row>
                   <div style="padding: 14px">
                     <el-row
-                    ><span>{{ item.feedback }}</span></el-row
+                    ><span>{{item.content}}</span></el-row
                     >
                   </div>
                 </el-row>
@@ -111,43 +111,60 @@
         border
       >
         <el-table-column
-          prop="userid"
           label="UserID"
           width="200"
-        ></el-table-column>
+        >
+          <template slot-scope="scope"><span>{{scope.row.uid}}</span></template>
+        </el-table-column>
         <el-table-column
-          prop="username"
           label="Username"
           width="400"
-        ></el-table-column>
+        >
+          <template slot-scope="scope"><span>{{scope.row.name}}</span></template>
+        </el-table-column>
         <el-table-column
-          prop="email"
           label="email"
           width="400"
-        ></el-table-column>
+        >
+          <template slot-scope="scope"><span>{{scope.row.email}}</span></template>
+        </el-table-column>
         <el-table-column
-          prop="gender"
+
           label="Gender"
           width="200"
-        ></el-table-column>
+        >
+          <template slot-scope="scope"><span>{{scope.row.gender}}</span></template>
+        </el-table-column>
         <el-table-column
-          prop="usertype"
+
           label="User Type"
           width="200"
-        ></el-table-column>
+        >
+          <template slot-scope="scope"><span>{{scope.row.role}}</span></template>
+        </el-table-column>
         <el-table-column
-          prop="status"
-          label="Status"
+
+          label="Status(0 means disabled)"
           width="200"
-        ></el-table-column>
+        >
+          <template slot-scope="scope"><span>{{scope.row.status==1?'available':'banned'}}</span></template>
+        </el-table-column>
         <el-table-column fixed="right" label="Operation">
           <template slot-scope="scope">
             <el-button
               size="small"
               type="danger"
-              @click="deleteUser(scope.$index)"
+              @click="ban(scope.$index,scope.row)"
+              style="width: 80px;"
             >
-              Delete
+              Ban
+            </el-button>
+            <el-button
+              size="small"
+              type="success"
+              @click="activate(scope.$index,scope.row)"
+            >
+              Activate
             </el-button>
           </template>
         </el-table-column>
@@ -165,6 +182,7 @@ export default {
   name: "Admin",
   data() {
     return {
+
       searchessays:'',
       searchUser:'',
       ticket:'',
@@ -206,7 +224,7 @@ export default {
         gender:'公',
         email:'123',
         usertype:'学生',
-          status:'normal',
+          status:'1',
         },
         {
           userid:'2',
@@ -214,7 +232,7 @@ export default {
           gender:'公',
           email:'1234',
           usertype:'学生',
-          status:'forbidden',
+          status:'1',
         },
         {
           userid:'3',
@@ -222,41 +240,12 @@ export default {
           gender:'公',
           email:'12345',
           usertype:'学生',
-          status:'normal',
+          status:'1',
         },
       ],
       feedback:[
-        {
-          id:'1',title:'shit',feedback:'As the most common language in the world, English has become a mandatory subject for students in many non-native English speaking countries. And in English teaching, there is a lot of effort given to writing assignments. As a teacher, it takes at least 15 minutes to review an essay carefully, and the task of reviewing a class is too heavy for the teacher. Therefore, considering the time allocated, teachers usually do not assign many essay exercises, and there is a risk that teachers will not be able to point out mistakes in detail or that it will not be possible to make all essay grades as objective and fair as possible. Therefore, in order to allow students to practice their writing skills as much as possible, and reduce the burden on teachers at the same time, we came up with the idea of creating a website that grades essays based on artificial intelligence. The essays uploaded by students can first be automatically graded by artificial intelligence to give teachers and students a reference. In this way, students can have a more intuitive cognition of their writing ability. And at the same time, it can also give teachers some reference opinions on teaching and guidance. Considering that most English learning software or websites in the market are focusing on reading and memorizing words, there are few automatic scoring projects for composition based on artificial intelligence. Teachers urgently need such an intelligent scoring system to improve the quality of teaching. Students also need such a system to improve their writing ability. Therefore, I think our project is feasible  and has broad market prospects.\n',
-        },
-        {
-          id:'1',title:'shit',feedback:'As the most common language in the world, English has become a mandatory subject for students in many non-native English speaking countries. And in English teaching, there is a lot of effort given to writing assignments. As a teacher, it takes at least 15 minutes to review an essay carefully, and the task of reviewing a class is too heavy for the teacher. Therefore, considering the time allocated, teachers usually do not assign many essay exercises, and there is a risk that teachers will not be able to point out mistakes in detail or that it will not be possible to make all essay grades as objective and fair as possible. Therefore, in order to allow students to practice their writing skills as much as possible, and reduce the burden on teachers at the same time, we came up with the idea of creating a website that grades essays based on artificial intelligence. The essays uploaded by students can first be automatically graded by artificial intelligence to give teachers and students a reference. In this way, students can have a more intuitive cognition of their writing ability. And at the same time, it can also give teachers some reference opinions on teaching and guidance. Considering that most English learning software or websites in the market are focusing on reading and memorizing words, there are few automatic scoring projects for composition based on artificial intelligence. Teachers urgently need such an intelligent scoring system to improve the quality of teaching. Students also need such a system to improve their writing ability. Therefore, I think our project is feasible  and has broad market prospects.\n',
-        },
-        {
-          id:'1',title:'shit',feedback:'As the most common language in the world, English has become a mandatory subject for students in many non-native English speaking countries. And in English teaching, there is a lot of effort given to writing assignments. As a teacher, it takes at least 15 minutes to review an essay carefully, and the task of reviewing a class is too heavy for the teacher. Therefore, considering the time allocated, teachers usually do not assign many essay exercises, and there is a risk that teachers will not be able to point out mistakes in detail or that it will not be possible to make all essay grades as objective and fair as possible. Therefore, in order to allow students to practice their writing skills as much as possible, and reduce the burden on teachers at the same time, we came up with the idea of creating a website that grades essays based on artificial intelligence. The essays uploaded by students can first be automatically graded by artificial intelligence to give teachers and students a reference. In this way, students can have a more intuitive cognition of their writing ability. And at the same time, it can also give teachers some reference opinions on teaching and guidance. Considering that most English learning software or websites in the market are focusing on reading and memorizing words, there are few automatic scoring projects for composition based on artificial intelligence. Teachers urgently need such an intelligent scoring system to improve the quality of teaching. Students also need such a system to improve their writing ability. Therefore, I think our project is feasible  and has broad market prospects.\n',
-        },
-        {
-          id:'1',title:'shit',feedback:'As the most common language in the world, English has become a mandatory subject for students in many non-native English speaking countries. And in English teaching, there is a lot of effort given to writing assignments. As a teacher, it takes at least 15 minutes to review an essay carefully, and the task of reviewing a class is too heavy for the teacher. Therefore, considering the time allocated, teachers usually do not assign many essay exercises, and there is a risk that teachers will not be able to point out mistakes in detail or that it will not be possible to make all essay grades as objective and fair as possible. Therefore, in order to allow students to practice their writing skills as much as possible, and reduce the burden on teachers at the same time, we came up with the idea of creating a website that grades essays based on artificial intelligence. The essays uploaded by students can first be automatically graded by artificial intelligence to give teachers and students a reference. In this way, students can have a more intuitive cognition of their writing ability. And at the same time, it can also give teachers some reference opinions on teaching and guidance. Considering that most English learning software or websites in the market are focusing on reading and memorizing words, there are few automatic scoring projects for composition based on artificial intelligence. Teachers urgently need such an intelligent scoring system to improve the quality of teaching. Students also need such a system to improve their writing ability. Therefore, I think our project is feasible  and has broad market prospects.\n',
-        },
-        {
-          id:'1',title:'shit',feedback:'heavy for the teacher. Therefore, considering the time allocated, teachers usually do not assign many essay exercises, and there is a risk that teachers will not be able to point out mistakes in detail or that it will not be possible to make all essay grades as objective and fair as possible. Therefore, in order to allow students to practice their writing skills as much as possible, and reduce the burden on teachers at the same time, we came up with the idea of creating a website that grades essays based on artificial intelligence. The essays uploaded by students can first be automatically graded by artificial intelligence to give teachers and students a reference. In this way, students can have a more intuitive cognition of their writing ability. And at the same time, it can also give teachers some reference opinions on teaching and guidance. Considering that most English learning software or websites in the market are focusing on reading and memorizing words, there are few automatic scoring projects for composition based on artificial intelligence. Teachers urgently need such an intelligent scoring system to improve the quality of teaching. Students also need such a system to improve their writing ability. Therefore, I think our project is feasible  and has broad market prospects.\n',
-        },
-        {
-          id:'1',title:'shit',feedback:'As the most common language in the world, English has become a mandatory subject for students in many non-native English speaking countries. And in English teaching, there is a lot of effort given to writing assignments. As a teacher, it takes at least 15 minutes to review an essay carefully, and the task of reviewing a class is too heavy for the teacher. Therefore, considering the time allocated, teachers usually do not assign many essay exercises, and there is a risk that teachers will not be able to point out mistakes in detail or that it will not be possible to make all essay grades as objective and fair as possible. Therefore, in order to allow students to practice their writing skills as much as possible, and reduce the burden on teachers at the same time, we came up with the idea of creating a website that grades essays based on artificial intelligence. The essays uploaded by students can first be automatically graded by artificial intelligence to give teachers and students a reference. In this way, students can have a more intuitive cognition of their writing ability. And at the same time, it can also give teachers some reference opinions on teaching and guidance. Considering that most English learning software or websites in the market are focusing on reading and memorizing words, there are few automatic scoring projects for composition based on artificial intelligence. Teachers urgently need such an intelligent scoring system to improve the quality of teaching. Students also need such a system to improve their writing ability. Therefore, I think our project is feasible  and has broad market prospects.\n',
-        },
-        {
-          id:'1',title:'shit',feedback:'As the most common language in the world, English has become a mandatory subject for students in many non-native English speaking countries. And in English teaching, there is a lot of effort given to writing assignments. As a teacher, it takes at least 15 minutes to review an essay carefully, and the task of reviewing a class is too heavy for the teacher. Therefore, considering the time allocated, teachers usually do not assign many essay exercises, and there is a risk that teachers will not be able to point out mistakes in detail or that it will not be possible to make all essay grades as objective and fair as possible. Therefore, in order to allow students to practice their writing skills as much as possible, and reduce the burden on teachers at the same time, we came up with the idea of creating a website that grades essays based on artificial intelligence. The essays uploaded by students can first be automatically graded by artificial intelligence to give teachers and students a reference. In this way, students can have a more intuitive cognition of their writing ability. And at the same time, it can also give teachers some reference opinions on teaching and guidance. Considering that most English learning software or websites in the market are focusing on reading and memorizing words, there are few automatic scoring projects for composition based on artificial intelligence. Teachers urgently need such an intelligent scoring system to improve the quality of teaching. Students also need such a system to improve their writing ability. Therefore, I think our project is feasible  and has broad market prospects.\n',
-        },
-        {
-          id:'1',title:'shit',feedback:'As the most common language in the world, English has become a mandatory subject for students in many non-native English speaking countries. And in English teaching, there is a lot of effort given to writing assignments. As a teacher, it takes at least 15 minutes to review an essay carefully, and the task of reviewing a class is too heavy for the teacher. Therefore, considering the time allocated, teachers usually do not assign many essay exercises, and there is a risk that teachers will not be able to point out mistakes in detail or that it will not be possible to make all essay grades as objective and fair as possible. Therefore, in order to allow students to practice their writing skills as much as possible, and reduce the burden on teachers at the same time, we came up with the idea of creating a website that grades essays based on artificial intelligence. The essays uploaded by students can first be automatically graded by artificial intelligence to give teachers and students a reference. In this way, students can have a more intuitive cognition of their writing ability. And at the same time, it can also give teachers some reference opinions on teaching and guidance. Considering that most English learning software or websites in the market are focusing on reading and memorizing words, there are few automatic scoring projects for composition based on artificial intelligence. Teachers urgently need such an intelligent scoring system to improve the quality of teaching. Students also need such a system to improve their writing ability. Therefore, I think our project is feasible  and has broad market prospects.\n',
-        },
-        {
-          id:'1',title:'shit',feedback:'As the most common language in the world, English has become a mandatory subject for students in many non-native English speaking countries. And in English teaching, there is a lot of effort given to writing assignments. As a teacher, it takes at least 15 minutes to review an essay carefully, and the task of reviewing a class is too heavy for the teacher. Therefore, considering the time allocated, teachers usually do not assign many essay exercises, and there is a risk that teachers will not be able to point out mistakes in detail or that it will not be possible to make all essay grades as objective and fair as possible. Therefore, in order to allow students to practice their writing skills as much as possible, and reduce the burden on teachers at the same time, we came up with the idea of creating a website that grades essays based on artificial intelligence. The essays uploaded by students can first be automatically graded by artificial intelligence to give teachers and students a reference. In this way, students can have a more intuitive cognition of their writing ability. And at the same time, it can also give teachers some reference opinions on teaching and guidance. Considering that most English learning software or websites in the market are focusing on reading and memorizing words, there are few automatic scoring projects for composition based on artificial intelligence. Teachers urgently need such an intelligent scoring system to improve the quality of teaching. Students also need such a system to improve their writing ability. Therefore, I think our project is feasible  and has broad market prospects.\n',
-        },
-        {
-          id:'1',title:'shit',feedback:'As the most common language in the world, English has become a mandatory subject for students in many non-native English speaking countries. And in English teaching, there is a lot of effort given to writing assignments. As a teacher, it takes at least 15 minutes to review an essay carefully, and the task of reviewing a class is too heavy for the teacher. Therefore, considering the time allocated, teachers usually do not assign many essay exercises, and there is a risk that teachers will not be able to point out mistakes in detail or that it will not be possible to make all essay grades as objective and fair as possible. Therefore, in order to allow students to practice their writing skills as much as possible, and reduce the burden on teachers at the same time, we came up with the idea of creating a website that grades essays based on artificial intelligence. The essays uploaded by students can first be automatically graded by artificial intelligence to give teachers and students a reference. In this way, students can have a more intuitive cognition of their writing ability. And at the same time, it can also give teachers some reference opinions on teaching and guidance. Considering that most English learning software or websites in the market are focusing on reading and memorizing words, there are few automatic scoring projects for composition based on artificial intelligence. Teachers urgently need such an intelligent scoring system to improve the quality of teaching. Students also need such a system to improve their writing ability. Therefore, I think our project is feasible  and has broad market prospects.\n',
-        },
-        ],
+
+      ],
     };
   },
   methods: {
@@ -297,20 +286,56 @@ export default {
           });
       })
     },
-    getalluser(){
-      this.$axios.get()
+    getfeedback(){
+      this.$axios.get('/feedback')
       .then(res=>{
-        this.userData=res.data
+        this.feedback = res.data.data;
+
+
+        console.log(this.feedback)
+
+
       })
+        .catch(function (error) {
+          console.log(error);
+        })
+    },
+    getalluser(){
+      this.$axios.get('/user/all')
+      .then(res=>{
+        this.userData=res.data.data
+      })
+        .catch(function (error) {
+          console.log(error);
+        })
+    },
+    activate(index,row){
+      console.log(row.uid)
+      this.$axios.put('/user/status/?id='+row.uid+'&&status=1')
+        .then(res=>{
+          this.getalluser()
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    },
+    ban(index,row){
+      console.log(row.uid)
+     this.$axios.put('/user/status/?id='+row.uid+'&&status=0')
+        .then(res=>{
+          this.getalluser()
+        })
         .catch(function (error) {
           console.log(error);
         })
     },
   },
 
+
   mounted() {
    this.getinfo()
     this.getalluser()
+    this.getfeedback()
   }
 }
 </script>
