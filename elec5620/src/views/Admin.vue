@@ -51,7 +51,9 @@
           v-model="state"
           placeholder="Search the essay title"
           @blur="askcourse"
+          style="width: 800px"
         ></el-input>
+        <el-button icon="el-icon-search" size="small" @click="askcourse"></el-button>
       </el-header>
       <!--display essays-->
       <el-main>
@@ -281,8 +283,8 @@ export default {
     goessay(id){
       console.log(id),
       this.$router.push({
-        path: '/essayDetail',
-        name: '/EssayDetail',
+        path: '/studentDetail',
+        name: '/StudentDetail',
         params: {
           titleid:id,
         }
